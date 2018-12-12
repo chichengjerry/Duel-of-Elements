@@ -1,7 +1,7 @@
 #include "bezier.h"
 
 /***********************************************
- * ƒ}ƒNƒ’è‹`
+ * ãƒã‚¯ãƒ­å®šç¾©
  ***********************************************/
 
 #define NEWTON_ITERATIONS		4
@@ -19,18 +19,18 @@
 #define FC(aA1)					(3.0f * aA1)
 
 /***********************************************
- * ƒCƒ“ƒvƒŠƒƒ“ƒe[ƒVƒ‡ƒ“
+ * ã‚¤ãƒ³ãƒ—ãƒªãƒ¡ãƒ³ãƒ†ãƒ¼ã‚·ãƒ§ãƒ³
  ***********************************************/
 
 /**
- ƒxƒWƒF‹ÈüŠÖ”B
+ ãƒ™ã‚¸ã‚§æ›²ç·šé–¢æ•°ã€‚
  */
 float bezier_func(float aT, float aA1, float aA2) {
 	return ((FA(aA1, aA2) * aT + FB(aA1, aA2)) * aT + FC(aA1)) * aT;
 }
 
 /**
- ƒxƒWƒF‹Èü‚Ì”÷•ªŠÖ”B
+ ãƒ™ã‚¸ã‚§æ›²ç·šã®å¾®åˆ†é–¢æ•°ã€‚
  */
 float bezier_slope_func(float aT, float aA1, float aA2) {
 	return 3.0f * FA(aA1, aA2) * aT * aT + 2.0f * FB(aA1, aA2) * aT + FC(aA1);
@@ -38,7 +38,7 @@ float bezier_slope_func(float aT, float aA1, float aA2) {
 
 #if BINARY_SUBDIVISION
 /**
- ×•ª‰»‚·‚éB
+ ç´°åˆ†åŒ–ã™ã‚‹ã€‚
  */
 float binary_subdivide(float aX, float aA, float aB, float mx1, float mx2) {
 	float x, t;
@@ -60,10 +60,10 @@ float binary_subdivide(float aX, float aA, float aB, float mx1, float mx2) {
 #endif // BINARY_SUBDIVISION
 
 /**
- ƒjƒ…[ƒgƒ“Eƒ‰ƒtƒ\ƒ“–@‚ÅÚ‹ß’l‚ğ‹‚ß‚éB
+ ãƒ‹ãƒ¥ãƒ¼ãƒˆãƒ³ãƒ»ãƒ©ãƒ•ã‚½ãƒ³æ³•ã§æ¥è¿‘å€¤ã‚’æ±‚ã‚ã‚‹ã€‚
  */ 
 float newton_raphson_iterate(float ax, float aT, float mx1, float mx2) {
-	// ƒCƒ^ƒŒ[ƒVƒ‡ƒ“
+	// ã‚¤ã‚¿ãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³
 	for (int i = 0; i < NEWTON_ITERATIONS; i++) {
 		float s = bezier_slope_func(aT, mx1, mx2);
 		if (fabsf(s) < SLOPE_PRECISION) {
@@ -75,25 +75,25 @@ float newton_raphson_iterate(float ax, float aT, float mx1, float mx2) {
 }
 
 /**
- ƒxƒWƒF‹Èü‚ÌŒvZ‚·‚éB
- ƒRƒ“ƒgƒ[ƒ‹ƒ|ƒCƒ“ƒg‚ÍP0(0, 0)AP1(mx1, my1)AP2(mx2, my2)AP3(1, 1)l‚Â‚Å‚ ‚èA
- Š‚Â mx1 ‹y‚Ñ mx2 ‚Ì”ÍˆÍ‚Í [0, 1] ‚Æ‚È‚éB
+ ãƒ™ã‚¸ã‚§æ›²ç·šã®è¨ˆç®—ã™ã‚‹ã€‚
+ ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ«ãƒã‚¤ãƒ³ãƒˆã¯P0(0, 0)ã€P1(mx1, my1)ã€P2(mx2, my2)ã€P3(1, 1)å››ã¤ã§ã‚ã‚Šã€
+ ä¸”ã¤ mx1 åŠã³ mx2 ã®ç¯„å›²ã¯ [0, 1] ã¨ãªã‚‹ã€‚
  */
 float bezier(float x, float mx1, float my1, float mx2, float my2) {
 	if (!(0.0f <= mx1 && mx1 <= 1.0f && 0.0f <= mx2 && mx2 <= 1.0f)) {
-		// “ü—Í’l‚Éˆá‚¢‚ª‚ ‚é
+		// å…¥åŠ›å€¤ã«é•ã„ãŒã‚ã‚‹
 		return -1.0f;
 	}
 	if (fabsf(x) < SLOPE_PRECISION) {
-		// n“_
+		// å§‹ç‚¹
 		return 0.0f;
 	}
 	if (fabsf(x - 1.0f) < SLOPE_PRECISION) {
-		// I“_
+		// çµ‚ç‚¹
 		return 1.0f;
 	}
 	if (mx1 == my1 && mx2 == my2) {
-		// ƒŠƒjƒA‚Ìê‡
+		// ãƒªãƒ‹ã‚¢ã®å ´åˆ
 		return x;
 	}
 

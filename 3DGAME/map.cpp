@@ -119,7 +119,6 @@ void map_find_path_aa(node_t * path[], const map_t* map, node_t* start, node_t* 
 			printf("\n");
 		}
 		printf("\n");
-		Sleep(200);
 
 #endif
 		// Get the node with lowest cost(weight)

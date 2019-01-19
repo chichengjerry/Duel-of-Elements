@@ -1,102 +1,158 @@
 /***********************************************
  * [3D_GAME]
- * ���C������
- * GP11A341 24 ���y�t
+ * メイン処理
+ * GP11A341 24 張馳騁
  ***********************************************/
 
 /***********************************************
- * �C���N���[�h�t�@�C��
+ * インクルードファイル
  ***********************************************/
 #include "main.h"
-#include "bezier.h"
 #include "core.h"
-#include "heap.h"
-#include "map.h"
-#include "node.h"
+#include "d3d.h"
 
 /***********************************************
- * �}�N����`
+ * マクロ定義
  ***********************************************/
-#define APP_CLASSNAME	_T("AppClass")
-#define APP_TITLE		_T("")
-#define MAP_SIZE		15
+#define APP_CLASSNAME	_T("DuelOfElements")
+#define APP_TITLE		_T("Duel Of Elements")
 
-static int weight_map[MAP_SIZE][MAP_SIZE] = {
-	{ 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0 },
-	{ 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0 },
-	{ 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0 },
-	{ 0,  0, -1, -1, -1, -1,  0,  0,  0,  0, -1, -1, -1,  0,  0 },
-	{ 0,  0,  0,  0,  0, -1,  0,  0,  0,  0, -1,  0,  0,  0,  0 },
-	{ 0,  0,  0,  0,  0, -1,  0,  0,  0,  0, -1,  0,  0,  0,  0 },
-	{ 0,  0,  0,  0,  0, -1,  0,  0,  0,  0, -1,  0,  0,  0,  0 },
-	{ 0,  0,  0,  0,  0, -1,  0,  0,  0,  0, -1,  0,  0,  0,  0 },
-	{ 0,  0,  0,  0,  0, -1,  0,  0,  0,  0, -1,  0,  0,  0,  0 },
-	{ 0,  0,  0,  0,  0, -1,  0,  0,  0,  0, -1,  0,  0,  0,  0 },
-	{ 0,  0,  0,  0,  0, -1,  0,  0,  0,  0, -1,  0,  0,  0,  0 },
-	{ 0,  0, -1, -1, -1, -1,  0,  0,  0,  0, -1, -1, -1,  0,  0 },
-	{ 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0 },
-	{ 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0 },
-	{ 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0 },
-};
+LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
-int main(int argc, char* argv[]) {
+LPD3D d3d;
+DWORD g_nCountFPS;
 
-	static map_t* map = map_create(15, 15);
-	static node_t* path[HEAP_MAX] = { NULL };
+int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
+{
+	UNREFERENCED_PARAMETER(hPrevInstance);	// 無くても良いけど、警告が出る（未使用宣言）
+	UNREFERENCED_PARAMETER(lpCmdLine);		// 無くても良いけど、警告が出る（未使用宣言）
 
-	// Initialize weight_map
-	for (int y = 0; y < 15; y++) {
-		for (int x = 0; x < 15; x++) {
-			node_t node;
+	DWORD dwExecLastTime;
+	DWORD dwFPSLastTime;
+	DWORD dwCurrentTime;
+	DWORD dwFrameCount;
 
-			node.came_from = NULL;
-			node.f_score = -1;
-			node.g_score = -1;
-			node.weight = weight_map[y][x];
-			node.x = x;
-			node.y = y;
+	WNDCLASSEX wcex =
+	{
+		sizeof(WNDCLASSEX),
+		CS_CLASSDC,
+		WndProc,
+		0,
+		0,
+		hInstance,
+		NULL,
+		LoadCursor(NULL, IDC_ARROW),
+		(HBRUSH)(COLOR_WINDOW + 1),
+		NULL,
+		APP_CLASSNAME,
+		NULL
+	};
+	HWND hWnd;
+	MSG msg;
 
-			map_update(map, x, y, &node);
+	// ウィンドウクラスの登録
+	RegisterClassEx(&wcex);
 
-			// node_t *value = (node_t*)map_read(map, x, y);
-			// 
-			// printf("%2d ", value->weight);
-		}
+	// ウィンドウの作成
+	hWnd = CreateWindow(APP_CLASSNAME,
+		APP_TITLE,
+		WS_OVERLAPPEDWINDOW,
+		CW_USEDEFAULT,
+		CW_USEDEFAULT,
+		CL_WIDTH + GetSystemMetrics(SM_CXDLGFRAME) * 2,
+		CL_HEIGHT + GetSystemMetrics(SM_CXDLGFRAME) * 2 + GetSystemMetrics(SM_CYCAPTION),
+		NULL,
+		NULL,
+		hInstance,
+		NULL);
+
+	// 初期化処理(ウィンドウを作成してから行う)
+	if (FAILED(D3DInit(d3d, hInstance, hWnd)))
+	{
+		return -1;
 	}
 
-	node_t* start = map_read(map, 4, 4);
-	node_t* goal = map_read(map, 11, 7);
+	//フレームカウント初期化
+	timeBeginPeriod(1);				// 分解能を設定
+	dwExecLastTime = dwFPSLastTime = timeGetTime();
+	dwCurrentTime = dwFrameCount = 0;
 
-	map_find_path_aa(path, map, start, goal);
-	system("cls");
-	if (path[0]) {
-		for (int i = 0; path[i]; i++) {
-			printf("%02d,%02d ", path[i]->x, path[i]->y);
-			weight_map[path[i]->y][path[i]->x] = 99;
-		}
-		printf("\n\n");
-		for (int y = 0; y < MAP_SIZE; y++) {
-			for (int x = 0; x < MAP_SIZE; x++) {
-				int t = weight_map[y][x];
-				switch (t) {
-				case -1:
-					printf("[]");
-					break;
-				case 99:
-					printf("**");
-					break;
-				default:
-					printf("  ");
-					break;
-				}
+	// ウインドウの表示(初期化処理の後に呼ばないと駄目)
+	ShowWindow(hWnd, nCmdShow);
+	UpdateWindow(hWnd);
+
+	// メッセージループ
+	while (1)
+	{
+		if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
+		{
+			if (msg.message == WM_QUIT)
+			{// PostQuitMessage()が呼ばれたらループ終了
+				break;
 			}
-			printf("\n");
+			else
+			{
+				// メッセージの翻訳とディスパッチ
+				TranslateMessage(&msg);
+				DispatchMessage(&msg);
+			}
+		}
+		else
+		{
+			dwCurrentTime = timeGetTime();
+			if ((dwCurrentTime - dwFPSLastTime) >= 500)	// 0.5秒ごとに実行
+			{
+#ifdef _DEBUG
+				g_nCountFPS = dwFrameCount * 1000 / (dwCurrentTime - dwFPSLastTime);
+#endif
+				dwFPSLastTime = dwCurrentTime;
+				dwFrameCount = 0;
+			}
+
+			if ((dwCurrentTime - dwExecLastTime) >= (1000 / 60))
+			{
+				dwExecLastTime = dwCurrentTime;
+
+				// 更新処理
+
+				// 描画処理
+
+				dwFrameCount++;
+			}
 		}
 	}
-	else {
-		printf("Can't find a path to goal.\n");
-	}
-	_getch();
 
-	return 0;
+	// ウィンドウクラスの登録を解除
+	UnregisterClass(APP_CLASSNAME, wcex.hInstance);
+
+	// 終了処理
+	D3DDestroy(d3d);
+
+	timeEndPeriod(1);				// 分解能を戻す
+
+	return (int)msg.wParam;
+}
+
+LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+{
+	switch (uMsg)
+	{
+	case WM_DESTROY:
+		PostQuitMessage(0);
+		break;
+
+	case WM_KEYDOWN:
+		switch (wParam)
+		{
+		case VK_ESCAPE:					// [ESC]キーが押された
+			DestroyWindow(hWnd);		// ウィンドウを破棄するよう指示する
+			break;
+		}
+		break;
+
+	default:
+		break;
+	}
+
+	return DefWindowProc(hWnd, uMsg, wParam, lParam);
 }

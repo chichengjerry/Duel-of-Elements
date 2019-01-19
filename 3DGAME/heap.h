@@ -1,5 +1,5 @@
-#ifndef _HEAP_H_
-#define _HEAP_H_
+#ifndef __HEAP_H__
+#define __HEAP_H__
 
 #include "main.h"
 #include "node.h"
@@ -19,4 +19,4 @@ node_t* heap_remove(heap_t* heap, const int index);
 
 void heap_sort(heap_t* heap);
 
-#endif // !_HEAP_H_
+#endif // !__HEAP_H__

@@ -1,18 +1,18 @@
 /***********************************************
- * [main.heap]
- * ƒƒCƒ“ˆ—
- * GP11A341 24 ’£’yét
+ * [main.h]
+ * ãƒ¡ã‚¤ãƒ³å‡¦ç†
+ * GP11A341 24 å¼µé¦³é¨
  ***********************************************/
-#ifndef _CORE_H_
-#define _CORE_H_
+#ifndef __CORE_H__
+#define __CORE_H__
 
  /***********************************************
-  * ƒCƒ“ƒNƒ‹[ƒhƒtƒ@ƒCƒ‹
+  * ã‚¤ãƒ³ã‚¯ãƒ«ãƒ¼ãƒ‰ãƒ•ã‚¡ã‚¤ãƒ«
   ***********************************************/
 #include "main.h"
 
 /***********************************************
- * ƒ}ƒNƒ’è‹`
+ * ãƒã‚¯ãƒ­å®šç¾©
  ***********************************************/
 
 #define CL_DEVMODE				FALSE
@@ -23,9 +23,9 @@
 #define CL_WIDTH				640
 
 #define CM_CHEAT				FALSE
-#define CM_GODMODE				FALSE	/* GM_CHEAT‚ªTRUE‚Ì‚İ—LŒø */
-#define CM_SHOWBB				FALSE	/* GM_CHEAT‚ªTRUE‚Ì‚İ—LŒø */
-#define CM_SKY					TRUE	/* GM_CHEAT‚ªTRUE‚Ì‚İ•ÏX‚Å‚«‚é */
+#define CM_GODMODE				FALSE	// GM_CHEATãŒTRUEã®ã¿æœ‰åŠ¹
+#define CM_SHOWBB				FALSE	// GM_CHEATãŒTRUEã®ã¿æœ‰åŠ¹
+#define CM_SKY					TRUE	// GM_CHEATãŒTRUEã®ã¿å¤‰æ›´ã§ãã‚‹
 
 #define GM_GRAVITY				800
 #define GM_FOG					1000
@@ -37,4 +37,4 @@
 #define GR_VSYNC				FALSE
 #define GR_SHOWFPS				FALSE
 
-#endif // ! _CORE_H_
+#endif // !__CORE_H__

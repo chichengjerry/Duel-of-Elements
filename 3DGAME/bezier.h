@@ -1,38 +1,38 @@
 /***********************************************
- * [bezier.heap]
- * ƒxƒWƒF‹Èü‚É‚æ‚é“®‰æˆ—
- * GP11A341 24 ’£’yét
+ * [bezier.h]
+ * ãƒ™ã‚¸ã‚§æ›²ç·šã«ã‚ˆã‚‹å‹•ç”»å‡¦ç†
+ * GP11A341 24 å¼µé¦³é¨
  ***********************************************/
-#ifndef _BEZIER_H_
-#define _BEZIER_H_
+#ifndef __BEZIER_H__
+#define __BEZIER_H__
 
 #include "main.h"
 
 /***********************************************
- * ƒ}ƒNƒ’è‹`
+ * ãƒã‚¯ãƒ­å®šç¾©
  ***********************************************/
 
-#define BINARY_SUBDIVISION		0	/* ×•ª‰» */
+#define BINARY_SUBDIVISION		FALSE	/* ç´°åˆ†åŒ– */
 
 /***********************************************
- * ŠÖ”éŒ¾
+ * é–¢æ•°å®£è¨€
  ***********************************************/
 
-/**
- ƒxƒWƒF‹Èü‚ÌŒvZ‚·‚éB
- ƒRƒ“ƒgƒ[ƒ‹ƒ|ƒCƒ“ƒg‚ÍP0(0, 0)AP1(mx1, my1)AP2(mx2, my2)AP3(1, 1)l‚Â‚Å‚ ‚èA
- Š‚Â mx1 ‹y‚Ñ mx2 ‚Ì”ÍˆÍ‚Í [0, 1] ‚Æ‚È‚éB
- */
-float bezier(float x, float mx1, float my1, float mx2, float my2);
+//
+// xã‹ã‚‰ãƒ™ã‚¸ã‚§æ›²ç·šã®yã‚’è¨ˆç®—ã™ã‚‹ã€‚
+// ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ«ãƒã‚¤ãƒ³ãƒˆã¯P0(0, 0)ã€P1(mx1, my1)ã€P2(mx2, my2)ã€P3(1, 1)å››ã¤ã§ã‚ã‚Šã€
+// ä¸”ã¤ mx1 åŠã³ mx2 ã®ç¯„å›²ã¯ [0, 1] ã¨ãªã‚‹ã€‚
+//
+static BOOL bezier_calc(FLOAT* y, CONST FLOAT x, CONST FLOAT mx1, CONST FLOAT my1, CONST FLOAT mx2, CONST FLOAT my2);
 
-/**
- í—pƒxƒWƒF‹Èü‚ÌƒGƒCƒŠƒAƒXB
- */
+//
+// å¸¸ç”¨ãƒ™ã‚¸ã‚§æ›²ç·šã®ã‚¨ã‚¤ãƒªã‚¢ã‚¹ã€‚
+//
 
-#define EASE_IN_OUT(t)			bezier((t), 0.42f, 0.0f, 0.58f, 1.0f)
-#define EASE_IN(t)				bezier((t), 0.42f, 0.0f, 1.0f, 1.0f)
-#define EASE_OUT(t)				bezier((t), 0.0f, 0.0f, 0.58f, 1.0f)
-#define EASE(t)					bezier((t), 0.25f, 0.1f, 0.25f, 1.0f)
-#define LINEAR(t)				bezier((t), 0.0f, 0.0f, 1.0f, 1.0f)
+#define BEZIER_EASE_IN_OUT(t)	bezier_calc((t), 0.42f, 0.0f, 0.58f, 1.0f)
+#define BEZIER_EASE_IN(t)		bezier_calc((t), 0.42f, 0.0f, 1.0f, 1.0f)
+#define BEZIER_EASE_OUT(t)		bezier_calc((t), 0.0f, 0.0f, 0.58f, 1.0f)
+#define BEZIER_EASE(t)			bezier_calc((t), 0.25f, 0.1f, 0.25f, 1.0f)
+#define LINEAR(t)				bezier_calc((t), 0.0f, 0.0f, 1.0f, 1.0f)
 
-#endif // !_BEZIER_H_
+#endif // !__BEZIER_H__

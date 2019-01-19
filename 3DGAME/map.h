@@ -1,11 +1,17 @@
-#ifndef _MAP_H_
-#define _MAP_H_
+/***********************************************
+ * [map.h]
+ * •ﬁ•√•◊ÑI¿Ì
+ * GP11A341 24 èàÒYÚG
+ ***********************************************/
+
+#ifndef __MAP_H__
+#define __MAP_H__
 
 #include "main.h"
 #include "heap.h"
 #include "node.h"
 
-typedef struct map_t {
+typedef struct _map_t {
 	int width;
 	int height;
 	node_t* nodes;
@@ -18,4 +24,4 @@ node_t*			map_read(const map_t* weight_map, int x, int y);
 void			map_find_neighbours(const map_t* map, node_t* neighbours[], node_t* current);
 void			map_update(const map_t* weight_map, int x, int y, const node_t* new_node);
 
-#endif // !_MAP_H_
+#endif // !__MAP_H__

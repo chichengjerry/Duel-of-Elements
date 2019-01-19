@@ -1,7 +1,7 @@
 #include "bezier.h"
 
 /***********************************************
- * ƒ}ƒNƒ’è‹`
+ * ãƒã‚¯ãƒ­å®šç¾©
  ***********************************************/
 
 #define NEWTON_ITERATIONS		4
@@ -14,34 +14,38 @@
 #define SUBDIVISION_ITERATIONS	10
 #endif // BINARY_SUBDIVISION
 
-#define FA(aA1, aA2)			(1.0f - 3.0f * aA2 + 3.0f * aA1)
-#define FB(aA1, aA2)			(3.0f * aA2 - 6.0f * aA1)
-#define FC(aA1)					(3.0f * aA1)
-
 /***********************************************
- * ƒCƒ“ƒvƒŠƒƒ“ƒe[ƒVƒ‡ƒ“
+ * ã‚¤ãƒ³ãƒ—ãƒªãƒ¡ãƒ³ãƒ†ãƒ¼ã‚·ãƒ§ãƒ³
  ***********************************************/
 
-/**
- ƒxƒWƒF‹ÈüŠÖ”B
- */
-float bezier_func(float aT, float aA1, float aA2) {
-	return ((FA(aA1, aA2) * aT + FB(aA1, aA2)) * aT + FC(aA1)) * aT;
+#define FACTOR_A(a, b)			(1.0f - 3.0f * (b) + 3.0f * (a))
+#define FACTOR_B(a, b)			(3.0f * (b) - 6.0f * (a))
+#define FACTOR_C(a)				(3.0f * (a))
+
+//
+// ãƒ™ã‚¸ã‚§æ›²ç·šé–¢æ•°ã€‚
+//
+static FLOAT bezier(FLOAT aT, FLOAT aA1, FLOAT aA2) {
+	return ((FACTOR_A(aA1, aA2) * aT + FACTOR_B(aA1, aA2)) * aT + FACTOR_C(aA1)) * aT;
 }
 
-/**
- ƒxƒWƒF‹Èü‚Ì”÷•ªŠÖ”B
- */
-float bezier_slope_func(float aT, float aA1, float aA2) {
-	return 3.0f * FA(aA1, aA2) * aT * aT + 2.0f * FB(aA1, aA2) * aT + FC(aA1);
+//
+// ãƒ™ã‚¸ã‚§æ›²ç·šã®å¾®åˆ†é–¢æ•°ã€‚
+//
+static FLOAT bezier_slope(FLOAT aT, FLOAT aA1, FLOAT aA2) {
+	return 3.0f * FACTOR_A(aA1, aA2) * aT * aT + 2.0f * FACTOR_B(aA1, aA2) * aT + FACTOR_C(aA1);
 }
+
+#undef FACTOR_A
+#undef FACTOR_B
+#undef FACTOR_C
 
 #if BINARY_SUBDIVISION
-/**
- ×•ª‰»‚·‚éB
- */
-float binary_subdivide(float aX, float aA, float aB, float mx1, float mx2) {
-	float x, t;
+//
+// ç´°åˆ†åŒ–ã€‚
+//
+FLOAT subdivide(FLOAT aX, FLOAT aA, FLOAT aB, FLOAT mx1, FLOAT mx2) {
+	FLOAT x, t;
 	int i = 0;
 
 	do {
@@ -59,71 +63,75 @@ float binary_subdivide(float aX, float aA, float aB, float mx1, float mx2) {
 }
 #endif // BINARY_SUBDIVISION
 
-/**
- ƒjƒ…[ƒgƒ“Eƒ‰ƒtƒ\ƒ“–@‚ÅÚ‹ß’l‚ğ‹‚ß‚éB
- */ 
-float newton_raphson_iterate(float ax, float aT, float mx1, float mx2) {
-	// ƒCƒ^ƒŒ[ƒVƒ‡ƒ“
+//
+// ãƒ‹ãƒ¥ãƒ¼ãƒˆãƒ³æ³•ã§æ¥è¿‘å€¤ã‚’æ±‚ã‚ã‚‹ã€‚
+// 
+static FLOAT newton_raphson_iterate(FLOAT ax, FLOAT aT, FLOAT mx1, FLOAT mx2) {
+	// ã‚¤ã‚¿ãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³
 	for (int i = 0; i < NEWTON_ITERATIONS; i++) {
-		float s = bezier_slope_func(aT, mx1, mx2);
+		FLOAT s = bezier_slope(aT, mx1, mx2);
 		if (fabsf(s) < SLOPE_PRECISION) {
 			return aT;
 		}
-		aT -= (bezier_func(aT, mx1, mx2) - ax) / s;
+		aT -= (bezier(aT, mx1, mx2) - ax) / s;
 	}
 	return aT;
 }
 
-/**
- ƒxƒWƒF‹Èü‚ÌŒvZ‚·‚éB
- ƒRƒ“ƒgƒ[ƒ‹ƒ|ƒCƒ“ƒg‚ÍP0(0, 0)AP1(mx1, my1)AP2(mx2, my2)AP3(1, 1)l‚Â‚Å‚ ‚èA
- Š‚Â mx1 ‹y‚Ñ mx2 ‚Ì”ÍˆÍ‚Í [0, 1] ‚Æ‚È‚éB
- */
-float bezier(float x, float mx1, float my1, float mx2, float my2) {
+static BOOL bezier_calc(FLOAT* y, CONST FLOAT x, CONST FLOAT mx1, CONST FLOAT my1, CONST FLOAT mx2, CONST FLOAT my2) {
+	
+	//æ—©ã‚ã«é–¢æ•°ã‚’å®Œæˆã•ã›ã‚‹
 	if (!(0.0f <= mx1 && mx1 <= 1.0f && 0.0f <= mx2 && mx2 <= 1.0f)) {
-		// “ü—Í’l‚Éˆá‚¢‚ª‚ ‚é
-		return -1.0f;
+		// å…¥åŠ›å€¤ã«é•ã„ãŒã‚ã‚‹
+		return FALSE;
 	}
 	if (fabsf(x) < SLOPE_PRECISION) {
-		// n“_
-		return 0.0f;
+		// å§‹ç‚¹
+		*y = 0.0f;
+		return TRUE;
 	}
 	if (fabsf(x - 1.0f) < SLOPE_PRECISION) {
-		// I“_
-		return 1.0f;
+		// çµ‚ç‚¹
+		*y = 1.0f;
+		return TRUE;
 	}
 	if (mx1 == my1 && mx2 == my2) {
-		// ƒŠƒjƒA‚Ìê‡
-		return x;
+		// ãƒªãƒ‹ã‚¢ã®å ´åˆ
+		*y = x;
+		return TRUE;
 	}
 
-	float sample_values[KSPLINE_TABLE_SIZE];
+	FLOAT sample[KSPLINE_TABLE_SIZE];
 	for (int i = 0; i < KSPLINE_TABLE_SIZE; i++) {
-		sample_values[i] = bezier_func(i * KSAMPLE_STEP_SIZE, mx1, mx2);
+		sample[i] = bezier(i * KSAMPLE_STEP_SIZE, mx1, mx2);
 	}
 
-	float aX = x;
-	float interval_start = 0.0f;
-	float d, s, t;
-	int current_sample = 1;
+	FLOAT aX = x;
+	FLOAT interval_start = 0.0f;
+	FLOAT d, s, t;
+	int current;
 
-	for (; current_sample != KSAMPLE_STEP_SIZE - 1 && sample_values[current_sample] <= x; current_sample++) {
+	for (current = 1; current != KSAMPLE_STEP_SIZE - 1 && sample[current] <= x; current++) {
 		interval_start += KSAMPLE_STEP_SIZE;
 	}
-	current_sample--;
 
-	d = (aX - sample_values[current_sample]) / (sample_values[current_sample + 1] - sample_values[current_sample]);
+	current--;
+
+	d = (aX - sample[current]) / (sample[current + 1] - sample[current]);
 	t = interval_start + d * KSAMPLE_STEP_SIZE;
-	s = bezier_slope_func(t, mx1, mx2);
+	s = bezier_slope(t, mx1, mx2);
+
 	if (s >= SLOPE_PRECISION) {
 		t = newton_raphson_iterate(aX, t, mx1, mx2);
 	}
 
 #if BINARY_SUBDIVISION
 	else if (s != 0.0f) {
-		t = binary_subdivide(aX, interval_start, interval_start + KSAMPLE_STEP_SIZE, mx1, mx2);
+		t = subdivide(aX, interval_start, interval_start + KSAMPLE_STEP_SIZE, mx1, mx2);
 	}
 #endif // BINARY_SUBDIVISION
 
-	return bezier_func(t, my1, my2);
+	*y = bezier(t, my1, my2);
+
+	return TRUE;
 }

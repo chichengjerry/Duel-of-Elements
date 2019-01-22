@@ -51,7 +51,7 @@
       <Filter>Source File</Filter>
     </ClCompile>
     <ClCompile Include="stage.cpp">
-      <Filter>Source File</Filter>
+      <Filter>Source File\util</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -7,17 +7,9 @@ void srt_init(SRT* srt)
 	srt->scl = D3DXVECTOR3(1.0f, 1.0f, 1.0f);
 }
 
-//
-// ¥Ð©`¥Á¥ã¥ë¥Æ©`¥Ö¥ë
-//
-static struct {
-	HRESULT					(*init)(BILLBOARD*, LPCWSTR) = billboard_init;
-	void					(*uninit)(BILLBOARD*) = billboard_uninit;
-
-	HRESULT					(*draw)(BILLBOARD*) = billboard_draw;
-	D3DXMATRIX*				(*get_matrix)(BILLBOARD*) = billboard_get_matrix;
-	SRT*					(*get_srt)(BILLBOARD*) = billboard_get_srt;
-} billboard_vtable;
+#define VTABLE BILLBOARDVTBL
+static VTABLE billboard_vtable;
+#undef VTABLE
 
 HRESULT billboard_init(BILLBOARD * pBoard, LPCWSTR src)
 {
@@ -111,16 +103,10 @@ SRT * billboard_get_srt(BILLBOARD * pBoard)
 	return &pBoard->srt;
 }
 
-//
-// ¥Ð©`¥Á¥ã¥ë¥Æ©`¥Ö¥ë
-//
-static struct {
-	HRESULT					(*init)(MODEL*, LPCWSTR) = model_init;
-	void					(*uninit)(MODEL*) = model_uninit;
-	HRESULT					(*draw)(MODEL*) = model_draw;
-	D3DXMATRIX*				(*get_matrix)(MODEL*) = model_get_matrix;
-	SRT*					(*get_srt)(MODEL*) = model_get_srt;
-} model_vtable;
+
+#define VTABLE MODELVTBL
+static VTABLE model_vtable;
+#undef VTABLE
 
 HRESULT model_init(MODEL * pModel, LPCWSTR src)
 {

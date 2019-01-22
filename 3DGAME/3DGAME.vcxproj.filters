@@ -50,6 +50,9 @@
     <ClCompile Include="intersection.cpp">
       <Filter>Source File</Filter>
     </ClCompile>
+    <ClCompile Include="stage.cpp">
+      <Filter>Source File</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="element.h">
@@ -90,6 +93,9 @@
     </ClInclude>
     <ClInclude Include="util.h">
       <Filter>Source File</Filter>
+    </ClInclude>
+    <ClInclude Include="stage.h">
+      <Filter>Source File\util</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

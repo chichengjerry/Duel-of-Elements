@@ -19,7 +19,7 @@
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
-LPD3D d3d;
+D3D d3d;
 DWORD g_nCountFPS;
 
 int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
@@ -67,7 +67,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 		NULL);
 
 	// 初期化処理(ウィンドウを作成してから行う)
-	if (FAILED(D3DInit(d3d, hInstance, hWnd)))
+	if (FAILED(D3DInit(&d3d, hInstance, hWnd)))
 	{
 		return -1;
 	}
@@ -114,8 +114,10 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 				dwExecLastTime = dwCurrentTime;
 
 				// 更新処理
+				D3dUpdate(&d3d);
 
 				// 描画処理
+				D3dRender(&d3d);
 
 				dwFrameCount++;
 			}
@@ -126,7 +128,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 	UnregisterClass(APP_CLASSNAME, wcex.hInstance);
 
 	// 終了処理
-	D3DDestroy(d3d);
+	D3dDestroy(&d3d);
 
 	timeEndPeriod(1);				// 分解能を戻す
 

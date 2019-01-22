@@ -19,13 +19,13 @@
 
 #define CL_HUD					TRUE
 #define CL_FULLSCREEN			FALSE
-#define CL_HEIGHT				480
-#define CL_WIDTH				640
+#define CL_HEIGHT				720
+#define CL_WIDTH				1280
 
-#define CM_CHEAT				FALSE
-#define CM_GODMODE				FALSE	// GM_CHEATがTRUEのみ有効
-#define CM_SHOWBB				FALSE	// GM_CHEATがTRUEのみ有効
-#define CM_SKY					TRUE	// GM_CHEATがTRUEのみ変更できる
+//	#define CM_CHEAT				FALSE
+//	#define CM_GODMODE				FALSE	// GM_CHEATがTRUEのみ有効
+//	#define CM_SHOWBB				FALSE	// GM_CHEATがTRUEのみ有効
+//	#define CM_SKY					TRUE	// GM_CHEATがTRUEのみ変更できる
 
 #define GM_GRAVITY				800
 #define GM_FOG					1000

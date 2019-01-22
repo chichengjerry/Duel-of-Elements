@@ -5,10 +5,8 @@ static D3DVTBL vtable;
 void D3DDestroy(LPD3D _this)
 {
 	if (_this) {
-		SAFE_RELEASE(_this->pDevice);
 		SAFE_RELEASE(_this->pD3D);
-		
-		free(_this);
+		SAFE_RELEASE(_this->pDevice);
 	}
 }
 
@@ -19,8 +17,6 @@ LPDIRECT3DDEVICE9 D3DGetDevice(LPD3D _this)
 
 HRESULT D3DInit(LPD3D _this, HINSTANCE hInst, HWND hWnd)
 {
-	_this = (LPD3D)malloc(sizeof(D3D));
-
 	_this->lpVtbl = &vtable;
 	LPDIRECT3D9 pD3D = _this->pD3D;
 	LPDIRECT3DDEVICE9 pDevice = _this->pDevice;

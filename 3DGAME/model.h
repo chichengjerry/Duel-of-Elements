@@ -60,6 +60,9 @@ void						srt_init(SRT*);
 //
 // ビルボード情報
 //
+#define VTABLE BILLBOARDVTBL
+struct VTABLE;
+
 typedef struct _billboard {
 	LPDIRECT3DVERTEXBUFFER9	pVtx;
 	LPDIRECT3DTEXTURE9		pTex;
@@ -68,20 +71,61 @@ typedef struct _billboard {
 	SRT						srt;
 
 	//	バーチャルテーブル
-	void*					lpVtbl;
+	VTABLE*				lpVtbl;
 } BILLBOARD;
 
+//
+// ビルボードの初期化。
+//
 HRESULT						billboard_init(BILLBOARD*, LPCWSTR);
+
+//
+// モデルの解放。
+//
 void						billboard_uninit(BILLBOARD*);
 
+//
+// ビルボードを描画する。
+//
 HRESULT						billboard_draw(BILLBOARD*);
+
+//
+// モデルのワールドマトリックスを取得する。
+//
 D3DXMATRIX*					billboard_get_matrix(BILLBOARD*);
+
+//
+// モデルのサイズ、回転、位置情報を取得する。
+//
 SRT*						billboard_get_srt(BILLBOARD*);
+
+//
+// モデルを更新する。
+//
+void						billboard_update(BILLBOARD*);
+
+//
+// バーチャルテーブル
+//
+typedef struct VTABLE {
+	HRESULT					(*init)(BILLBOARD*, LPCWSTR) = billboard_init;
+	void					(*uninit)(BILLBOARD*) = billboard_uninit;
+
+	HRESULT					(*draw)(BILLBOARD*) = billboard_draw;
+	D3DXMATRIX*				(*get_matrix)(BILLBOARD*) = billboard_get_matrix;
+	SRT*					(*get_srt)(BILLBOARD*) = billboard_get_srt;
+	void					(*update)(BILLBOARD*) = billboard_update;
+} VTABLE;
+
+#undef VTABLE
+
+#define VTABLE MODELVTBL
+struct VTABLE;
 
 //
 // モデル情報
 //
-typedef struct _mdl {
+typedef struct _model {
 	LPD3DXBUFFER			pMatBuf;
 	LPD3DXMESH				pMesh;
 	LPDIRECT3DTEXTURE9		pTex;
@@ -91,15 +135,49 @@ typedef struct _mdl {
 	SRT						srt;
 	
 	//	バーチャルテーブル
-	void*					lpVtbl;
+	VTABLE*					lpVtbl;
 } MODEL;
 
+//
+// モデルの初期化。
+//
 HRESULT						model_init(MODEL*, LPCWSTR);
+
+//
+// モデルの解放。
+//
 void						model_uninit(MODEL*);
 
+//
+// モデルを描画する。
+//
 HRESULT						model_draw(MODEL*);
+
+//
+// モデルのワールドマトリックスを取得する。
+//
 D3DXMATRIX*					model_get_matrix(MODEL*);
+
+//
+// モデルの情報を取得する。
+//
 SRT*						model_get_srt(MODEL*);
+
+//
+// モデルを更新する。
+//
 void						model_update(MODEL*);
 
+//
+// バーチャルテーブル
+//
+typedef struct VTABLE {
+	HRESULT					(*init)(MODEL*, LPCWSTR) = model_init;
+	void					(*uninit)(MODEL*) = model_uninit;
+	HRESULT					(*draw)(MODEL*) = model_draw;
+	D3DXMATRIX*				(*get_matrix)(MODEL*) = model_get_matrix;
+	SRT*					(*get_srt)(MODEL*) = model_get_srt;
+} VTABLE;
+
+#undef VTABLE
 #endif // !__MODEL_H__

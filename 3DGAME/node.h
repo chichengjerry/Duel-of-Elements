@@ -17,6 +17,8 @@ typedef struct node_t {
 
 int node_manhattan_distance(node_t* a, node_t* b);
 
+float node_euclidean_distance(node_t* a, node_t* b);
+
 bool node_compare(const node_t* a, const node_t* b);
 
 void node_reconstruct_path(node_t* path[], node_t* current);

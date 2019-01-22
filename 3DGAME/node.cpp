@@ -18,6 +18,13 @@ int node_manhattan_distance(node_t * a, node_t * b)
 	return (abs(a->x - b->x) + abs(a->y - b->y)) * NODE_LENGTH;
 }
 
+float node_euclidean_distance(node_t * a, node_t * b)
+{
+	float x = (a->x - b->x);
+	float y = (a->y - b->y);
+	return sqrtf(x * x + y * y) * NODE_LENGTH;
+}
+
 void node_swap(node_t ** a, node_t ** b)
 {
 	node_t* temp = *a;

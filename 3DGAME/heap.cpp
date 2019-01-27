@@ -1,85 +1,81 @@
 #include "heap.h"
 
-
-void heap_sift_down(heap_t* heap, int start, int end);
-
-int heap_find(node_t* node, heap_t * heap)
+int heap_find(NODE* pNode, HEAPARRAY * pHeapArray)
 {
-	for (int i = heap->length; i;) {
-		if (heap->heap[--i] == node) {
+	for (int i = pHeapArray->length; i;) {
+		if (pHeapArray->heap[--i] == pNode) {
 			return i;
 		}
 	}
 	return -1;
 }
 
-void heap_heapify(heap_t* heap)
+void heap_heapify(HEAPARRAY* pHeapArray)
 {
-	int start = (heap->length - 2) / 2;
+	int start = (pHeapArray->length - 2) / 2;
 
 	while (start >= 0) {
-		heap_sift_down(heap, start, heap->length - 1);
+		heap_sift_down(pHeapArray, start, pHeapArray->length - 1);
 		start--;
 	}
 }
 
-void heap_push(heap_t* heap, node_t* node)
+void heap_push(HEAPARRAY* pHeapArray, NODE* pNode)
 {
-	if (heap->length < HEAP_MAX - 1) {
-		heap->heap[heap->length] = node;
-		heap->length++;
+	if (pHeapArray->length < HEAP_MAX - 1) {
+		pHeapArray->heap[pHeapArray->length] = pNode;
+		pHeapArray->length++;
 
-		heap_heapify(heap);
+		heap_heapify(pHeapArray);
 	}
 }
 
-node_t* heap_remove(heap_t* heap, const int index)
+NODE* heap_remove(HEAPARRAY* pHeapArray, int nNodeIndex)
 {
-	if (index < 0 || index > heap->length - 1)
+	if (nNodeIndex < 0 || nNodeIndex > pHeapArray->length - 1)
 		return NULL;
 
-	heap_sort(heap);
+	heap_sort(pHeapArray);
 
-	node_t* node = heap->heap[index];
-	// Copy the data of node node_current
+	NODE* node = pHeapArray->heap[nNodeIndex];
 
-	for (int i = index, k = heap->length - 1; i < k; i++) {
-		heap->heap[i] = heap->heap[i + 1];
+	for (int i = nNodeIndex, k = pHeapArray->length - 1; i < k; i++) {
+		pHeapArray->heap[i] = pHeapArray->heap[i + 1];
 	}
-	heap->heap[(--heap->length)] = NULL;
+	pHeapArray->heap[(--pHeapArray->length)] = NULL;
 
-	heap_heapify(heap);
+	heap_heapify(pHeapArray);
 
 	return node;
 }
 
-void heap_sift_down(heap_t* heap, int start, int end)
+void heap_sift_down(HEAPARRAY* pHeapArray, int nStartIndex, int nEndIndex)
 {
-	int root = start;
+	int root = nStartIndex;
 	int left, right, swap;
 
-	while (2 * root + 1 <= end) {
+	while (2 * root + 1 <= nEndIndex) {
 		left = 2 * root + 1;
 		right = 2 * root + 2;
 		swap = root;
 
-		if (node_compare(heap->heap[swap], heap->heap[left]))
+		if (node_compare(pHeapArray->heap[swap], pHeapArray->heap[left]))
 			swap = left;
 
-		if (right <= end && node_compare(heap->heap[swap], heap->heap[right]))
+		if (right <= nEndIndex && node_compare(pHeapArray->heap[swap], pHeapArray->heap[right]))
 			swap = right;
 
 		if (root == swap)
 			return;
 
 		else {
-			node_swap(&heap->heap[root], &heap->heap[swap]);
+			node_swap(&pHeapArray->heap[root], &pHeapArray->heap[swap]);
 			root = swap;
 		}
 	}
 }
 
-void heap_sort(heap_t* heap)
+void heap_sort(HEAPARRAY* heap)
 {
 	int end;
 	heap_heapify(heap);

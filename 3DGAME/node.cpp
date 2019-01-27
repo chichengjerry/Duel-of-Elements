@@ -1,11 +1,11 @@
 #include "node.h"
 
-bool node_compare(const node_t * a, const node_t * b)
+bool node_compare(const NODE * a, const NODE * b)
 {
 	return a->f_score < b->f_score;
 }
 
-void node_reconstruct_path(node_t* sequence[], node_t* current)
+void node_reconstruct_path(NODE* sequence[], NODE* current)
 {
 	for (int i = 0; current; i++) {
 		sequence[i] = current;
@@ -13,21 +13,21 @@ void node_reconstruct_path(node_t* sequence[], node_t* current)
 	};
 }
 
-int node_manhattan_distance(node_t * a, node_t * b)
+int node_manhattan_distance(NODE * a, NODE * b)
 {
 	return (abs(a->x - b->x) + abs(a->y - b->y)) * NODE_LENGTH;
 }
 
-float node_euclidean_distance(node_t * a, node_t * b)
+float node_euclidean_distance(NODE * a, NODE * b)
 {
 	float x = (a->x - b->x);
 	float y = (a->y - b->y);
 	return sqrtf(x * x + y * y) * NODE_LENGTH;
 }
 
-void node_swap(node_t ** a, node_t ** b)
+void node_swap(NODE ** a, NODE ** b)
 {
-	node_t* temp = *a;
+	NODE* temp = *a;
 	*a = *b;
 	*b = temp;
 }

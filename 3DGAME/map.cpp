@@ -1,53 +1,46 @@
 #include "map.h"
+#include "util.h"
+
 #define DEBUG	1
 
-map_t* map_create(int width, int height)
+MAP* map_init(MAP* pMap, int width, int height)
 {
-	map_t* weight_map = (map_t*)malloc(sizeof(map_t));
-	if (!weight_map)
-		return NULL;
-
-	node_t* nodes = (node_t*)malloc(sizeof(node_t) * width * height);
+	NODE* nodes = (NODE*)malloc(sizeof(NODE) * width * height);
 	if (!nodes) {
-		free(weight_map);
 		return NULL;
 	}
 
-	memset(nodes, 0, sizeof(node_t) * width * height);
+	memset(nodes, 0, sizeof(NODE) * width * height);
 
-	weight_map->width = width;
-	weight_map->height = height;
-	weight_map->nodes = nodes;
+	pMap->width = width;
+	pMap->height = height;
+	pMap->nodes = nodes;
 
-	return weight_map;
+	return pMap;
 }
 
-void map_delete(map_t * map)
+void map_uninit(MAP * pMap)
 {
-	if (map) {
-		free(map->nodes);
-		free(map);
-	}
+	free(pMap->nodes);
 }
 
-void map_find_neighbours(const map_t* map, node_t* neighbours[], node_t* current)
+void map_find_neighbours(const MAP* pMap, NODE* pCurrentNode, NODE* pNeighbourNodes[])
 {
 	// Check all available node nodes
-	node_t** pp;
+	NODE** pp;
 
 	for (int x, y = 0; y <= 2; y++) {
 		for (x = 0; x <= 2; x++) {
-			pp = &neighbours[y * 3 + x];
-			*pp = map_read(map, current->x + x - 1, current->y + y - 1);
-
+			pp = &pNeighbourNodes[y * 3 + x];
+			*pp = map_get_node(pMap, pCurrentNode->x + x - 1, pCurrentNode->y + y - 1);
 		}
 	}
 
 #define REMOVE_NEIGHBOUR(t, t1, t2) \
-	if (neighbours[t] && -1 == neighbours[t]->weight) { \
-		pp = &neighbours[t1]; \
+	if (pNeighbourNodes[t] && -1 == pNeighbourNodes[t]->weight) { \
+		pp = &pNeighbourNodes[t1]; \
 		*pp = NULL; \
-		pp = &neighbours[t2]; \
+		pp = &pNeighbourNodes[t2]; \
 		*pp = NULL; \
 	}
 
@@ -59,29 +52,29 @@ void map_find_neighbours(const map_t* map, node_t* neighbours[], node_t* current
 #undef REMOVE_NEIGHBOUR
 
 	for (int i = 0; i < 9; i++) {
-		pp = &neighbours[i];
+		pp = &pNeighbourNodes[i];
 		if (*pp && -1 == (*pp)->weight) {
-			// Remove this neighbours
+			// Remove this neighbour
 			*pp = NULL;
 			continue;
 		}
 	}
 }
 
-void map_find_path_aa(node_t * path[], const map_t* map, node_t* start, node_t* goal)
+void map_aasterisk(const MAP* pMap, NODE* pStartNode, NODE* goal, NODE * path[])
 {
-	static heap_t closed_set;
-	static heap_t open_set;
+	static HEAPARRAY closed_set;
+	static HEAPARRAY open_set;
 
-	static node_t* neighbours[9];
+	static NODE* neighbours[9];
 
-	node_t* current;
+	NODE* current;
 
-	if (!path || !map)
+	if (!path || !pMap)
 		return;
 
 	// Create start position 
-	current = start;
+	current = pStartNode;
 
 	// Add start point to open set
 	heap_push(&open_set, current);
@@ -89,15 +82,15 @@ void map_find_path_aa(node_t * path[], const map_t* map, node_t* start, node_t* 
 	// Use manhattan distance
 	current->came_from = NULL;
 	current->g_score = 0;
-	current->f_score = node_manhattan_distance(start, goal);
+	current->f_score = node_manhattan_distance(pStartNode, goal);
 
 	while (open_set.length) {
 #if DEBUG
 		system("cls");
 		printf("\n");
-		for (int y = 0; y < map->height; y++) {
-			for (int x = 0; x < map->width; x++) {
-				node_t* node = map_read(map, x, y);
+		for (int y = 0; y < pMap->height; y++) {
+			for (int x = 0; x < pMap->width; x++) {
+				NODE* node = map_get_node(pMap, x, y);
 				if (node == current) {
 					printf("()");
 					continue;
@@ -136,11 +129,11 @@ void map_find_path_aa(node_t * path[], const map_t* map, node_t* start, node_t* 
 		// Add current node to closed set
 		heap_push(&closed_set, current);
 
-		map_find_neighbours(map, neighbours, current);
+		map_find_neighbours(pMap, neighbours, current);
 
 		for (int x, y = 0; y <= 2; y++) {
 			for (x = 0; x <= 2; x++) {
-				node_t* node = neighbours[y * 3 + x];
+				NODE* node = neighbours[y * 3 + x];
 				if (node) {
 					if (0 <= heap_find(node, &closed_set))
 						continue;
@@ -162,12 +155,12 @@ void map_find_path_aa(node_t * path[], const map_t* map, node_t* start, node_t* 
 	}
 }
 
-bool map_out_of_bound(const map_t* weight_map, int x, int y)
+BOOL map_out_of_bound(const MAP* weight_map, int x, int y)
 {
 	return !(0 <= x && 0 <= y && weight_map->width - 1 >= x && weight_map->height - 1 >= y);
 }
 
-node_t* map_read(const map_t* weight_map, int x, int y)
+NODE* map_get_node(const MAP* weight_map, int x, int y)
 {
 	if (!weight_map || map_out_of_bound(weight_map, x, y))
 		return NULL;
@@ -175,16 +168,16 @@ node_t* map_read(const map_t* weight_map, int x, int y)
 	return weight_map->nodes + y * weight_map->width + x;
 }
 
-void map_update(const map_t* weight_map, int x, int y, const node_t* new_node)
+void map_update(const MAP* weight_map, int x, int y, const NODE* new_node)
 {
 	if (!weight_map || map_out_of_bound(weight_map, x, y))
 		return;
 
-	node_t* old_node = map_read(weight_map, x, y);
+	NODE* old_node = map_get_node(weight_map, x, y);
 
 	if (new_node)
-		memcpy((void*)old_node, new_node, sizeof(node_t));
+		memcpy((void*)old_node, new_node, sizeof(NODE));
 	else
-		memset((void*)old_node, 0, sizeof(node_t));
+		memset((void*)old_node, 0, sizeof(NODE));
 }
 

@@ -53,6 +53,9 @@
     <ClCompile Include="stage.cpp">
       <Filter>Source File\util</Filter>
     </ClCompile>
+    <ClCompile Include="game.cpp">
+      <Filter>Source File\game</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="element.h">
@@ -85,9 +88,6 @@
     <ClInclude Include="model.h">
       <Filter>Source File\game</Filter>
     </ClInclude>
-    <ClInclude Include="game.h">
-      <Filter>Source File</Filter>
-    </ClInclude>
     <ClInclude Include="intersection.h">
       <Filter>Source File</Filter>
     </ClInclude>
@@ -96,6 +96,9 @@
     </ClInclude>
     <ClInclude Include="stage.h">
       <Filter>Source File\util</Filter>
+    </ClInclude>
+    <ClInclude Include="game.h">
+      <Filter>Source File\game</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

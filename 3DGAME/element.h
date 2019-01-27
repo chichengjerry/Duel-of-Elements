@@ -20,8 +20,10 @@ enum ELEMENT_TYPE {
 	ELEMENT_AIR
 };
 
-#define GET_ELEMENTS(e, t) (((e) & (0x3 << (t) * 2)) >> ((t) * 2))
-#define SET_ELEMENTS(e, t, n) ((e) = (e) & (0xff - (0x3 << ((t) * 2))) | ((n) << ((t) * 2)))
+#define MAX_ELEMENTS			16
+
+#define GET_ELEMENTS(e, t)		(((e) & (0x3 << (t) * 2)) >> ((t) * 2))
+#define SET_ELEMENTS(e, t, n)	((e) = (e) & (0xff - (0x3 << ((t) * 2))) | ((n) << ((t) * 2)))
 
 //
 // ¥¨¥ì¥á¥ó¥ÈÇéˆó

@@ -37,4 +37,8 @@
 #define GR_VSYNC				FALSE
 #define GR_SHOWFPS				FALSE
 
+//
+// 関数オーバーライド
+//
+
 #endif // !__CORE_H__

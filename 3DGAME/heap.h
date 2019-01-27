@@ -6,17 +6,19 @@
 
 #define HEAP_MAX			65536
 
-typedef struct heap_t {
-	node_t* heap[HEAP_MAX];
+typedef struct _heap {
+	NODE* heap[HEAP_MAX];
 	int length = 0;
-} heap_t;
+} HEAPARRAY;
 
-int heap_find(node_t* node, heap_t * heap);
+void heap_sift_down(HEAPARRAY* pHeapArray, int nStartIndex, int nEndIndex);
 
-void heap_push(heap_t* heap, node_t* node);
+int heap_find(NODE* pNode, HEAPARRAY* heapArray);
 
-node_t* heap_remove(heap_t* heap, const int index);
+void heap_push(HEAPARRAY* heapArray, NODE* pNode);
 
-void heap_sort(heap_t* heap);
+NODE* heap_remove(HEAPARRAY* heapArray, int nNodeIndex);
+
+void heap_sort(HEAPARRAY* heapArray);
 
 #endif // !__HEAP_H__

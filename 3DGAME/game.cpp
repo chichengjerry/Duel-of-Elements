@@ -106,11 +106,21 @@ void MAINGAME::Update(void)
 
 HRESULT MAINGAME::Draw(void)
 {
+	LPDIRECT3DDEVICE9 pDevice = D3D::GetDevice();
+	pDevice->EndScene();
 	for (int i = 0; i < MAX_PLAYER; i++) {
 		player[i]->camera->SetCamera();
+		D3DVIEWPORT9 vp = player[i]->camera->viewport;
+		D3DRECT rect = { vp.X, vp.Y, vp.X + vp.Width, vp.Y + vp.Height };
+
+		pDevice->Clear(0, &rect, (D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER), D3DCOLOR_RGBA(0, 0, 0, 0), 1.0f, 0);
+
+		pDevice->BeginScene();
 		player[i]->Draw(this);
 		map->Draw();
+		pDevice->EndScene();
 	}
+	pDevice->BeginScene();
 
 	return S_OK;
 }

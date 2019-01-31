@@ -69,7 +69,7 @@ MAINGAME::MAINGAME(INT nPlayer)
 				D3DXVECTOR3((x + 1) * NODE_LENGTH,	0.0f, (z + 1) * NODE_LENGTH) + offset,
 			};
 
-			map->polygons[z * MAP_SIZE + x] = new POLYGON(_T("data/TEXTURE/grass.jpg"), vtx);
+			map->ground[z * MAP_SIZE + x] = new GROUND(vtx);
 		}
 	}
 
@@ -107,7 +107,9 @@ void MAINGAME::Update(void)
 HRESULT MAINGAME::Draw(void)
 {
 	for (int i = 0; i < MAX_PLAYER; i++) {
+		player[i]->camera->SetCamera();
 		player[i]->Draw(this);
+		map->Draw();
 	}
 
 	return S_OK;

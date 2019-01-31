@@ -11,6 +11,7 @@
 #include "core.h"
 #include "camera.h"
 #include "element.h"
+#include "ground.h"
 #include "map.h"
 #include "light.h"
 #include "player.h"
@@ -27,6 +28,5 @@ typedef struct MAINGAME {
 	void					Update(void);
 	HRESULT					Draw(void);
 } MAINGAME;
-
 
 #endif // !__GAME_H__

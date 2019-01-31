@@ -71,16 +71,14 @@ void CAMERA::SetCamera(void)
 void CAMERA::Update(void)
 {
 	v_tar = player->srt.pos;
-
-	v_pos = v_tar - D3DXVECTOR3(distance, 0.0f, 0.0f);
+	D3DXVECTOR3 pos = D3DXVECTOR3(0.0f, distance, 0.0f);
 
 	D3DXVECTOR4 tmp;
 	D3DXMATRIX mtxRot;
 
 	D3DXMatrixIdentity(&mtxRot);
-	// »ØÜž¤ò·´Ó³
 	D3DXMatrixRotationYawPitchRoll(&mtxRot, player->srt.rot.y, D3DXToRadian(pitch), player->srt.rot.z);
-	D3DXVec3Transform(&tmp, &v_pos, &mtxRot);
+	D3DXVec3Transform(&tmp, &pos, &mtxRot);
 
-	v_pos = D3DXVECTOR3(tmp.x, tmp.y, tmp.z);
+	v_pos = v_tar + D3DXVECTOR3(tmp.x, tmp.y, tmp.z);
 }

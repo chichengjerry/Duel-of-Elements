@@ -121,6 +121,7 @@
     <ClCompile Include="d3d.cpp" />
     <ClCompile Include="element.cpp" />
     <ClCompile Include="game.cpp" />
+    <ClCompile Include="ground.cpp" />
     <ClCompile Include="heap.cpp" />
     <ClCompile Include="input.cpp" />
     <ClCompile Include="intersection.cpp" />
@@ -130,6 +131,7 @@
     <ClCompile Include="model.cpp" />
     <ClCompile Include="node.cpp" />
     <ClCompile Include="player.cpp" />
+    <ClCompile Include="polygon.cpp" />
     <ClCompile Include="sound.cpp" />
     <ClCompile Include="stage.cpp" />
   </ItemGroup>
@@ -150,6 +152,7 @@
     <ClInclude Include="model.h" />
     <ClInclude Include="node.h" />
     <ClInclude Include="player.h" />
+    <ClInclude Include="polygon.h" />
     <ClInclude Include="sound.h" />
     <ClInclude Include="stage.h" />
     <ClInclude Include="util.h" />

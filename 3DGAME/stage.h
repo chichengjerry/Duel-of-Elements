@@ -24,10 +24,11 @@ typedef struct GAMESTATE {
 	MAINGAME*			pStateEnd;
 
 	GAMESTATE(STAGETYPE eStageType);
-	virtual	~GAMESTATE(void);
+	~GAMESTATE(void);
 
-	STAGETYPE			getStage(void);
-	void				setStage(STAGETYPE eStageType);
+	void				SetStage(STAGETYPE eStageType);
+	void				Update(void);
+	void				Draw(void);
 } GAMESTATE;
 
 

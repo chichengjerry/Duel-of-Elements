@@ -6,7 +6,7 @@
 LPDIRECT3D9			D3D::pD3D = NULL;								// Direct3D オブジェクト
 LPDIRECT3DDEVICE9	D3D::pDevice = NULL;							// Deviceオブジェクト(宙鮫に駅勣)
 
-MAINGAME* game;
+GAMESTATE* game;
 
 void D3D::Destroy(void)
 {
@@ -123,9 +123,8 @@ HRESULT D3D::Init(HINSTANCE hInst, HWND hWnd)
 	DINPUT::Init(hInst, hWnd);
 	DSOUND::Init(hWnd);
 
-	game = new MAINGAME(2);
+	game = new GAMESTATE(STAGE_VERSUS);
 
-	DSOUND::Play(SOUND_BGM000);
 	return S_OK;
 }
 

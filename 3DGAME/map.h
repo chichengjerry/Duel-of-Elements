@@ -8,7 +8,7 @@
 #define __MAP_H__
 
 #include "main.h"
-#include "model.h"
+#include "ground.h"
 #include "heap.h"
 #include "node.h"
 
@@ -16,7 +16,7 @@
 
 typedef struct MAP {
 	NODE* nodes;
-	POLYGON* polygons[MAP_MAX_POLYGON] = {};
+	GROUND* ground[MAP_MAX_POLYGON] = {};
 
 	int width;
 	int height;

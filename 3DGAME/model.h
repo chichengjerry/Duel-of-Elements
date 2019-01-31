@@ -9,31 +9,8 @@
 
 #include "main.h"
 #include "core.h"
+#include "d3d.h"
 #include "util.h"
-
-//
-// ¥Ý¥ê¥´¥óÇéˆó
-//
-typedef struct POLYGON {
-	LPDIRECT3DVERTEXBUFFER9	pVtx;
-	LPDIRECT3DTEXTURE9		pTex;
-	
-	D3DXCOLOR				col;
-	D3DXVECTOR3				vtx[NUM_VERTEX];
-	D3DXMATRIX				mtx;
-	SRT						srt;
-
-	BOOL					isBillboard;
-
-	POLYGON(LPCWSTR src, D3DXVECTOR3 vertices[]);
-	~POLYGON();
-
-	HRESULT					SetVertex(LPDIRECT3DDEVICE9 pDevice);
-	HRESULT					Draw(CAMERA* pCamera);
-	D3DXMATRIX*				GetMatrix();
-	SRT*					GetSrt();
-	void					Update();
-} POLYGON;
 
 //
 // ¥â¥Ç¥ëÇéˆó

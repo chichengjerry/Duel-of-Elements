@@ -44,9 +44,6 @@
     <ClCompile Include="d3d.cpp">
       <Filter>Source File\util</Filter>
     </ClCompile>
-    <ClCompile Include="model.cpp">
-      <Filter>Source File\game</Filter>
-    </ClCompile>
     <ClCompile Include="intersection.cpp">
       <Filter>Source File</Filter>
     </ClCompile>
@@ -67,6 +64,15 @@
     </ClCompile>
     <ClCompile Include="light.cpp">
       <Filter>Source File</Filter>
+    </ClCompile>
+    <ClCompile Include="model.cpp">
+      <Filter>Source File\util</Filter>
+    </ClCompile>
+    <ClCompile Include="ground.cpp">
+      <Filter>Source File</Filter>
+    </ClCompile>
+    <ClCompile Include="polygon.cpp">
+      <Filter>Source File\util</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -97,9 +103,6 @@
     <ClInclude Include="d3d.h">
       <Filter>Source File\util</Filter>
     </ClInclude>
-    <ClInclude Include="model.h">
-      <Filter>Source File\game</Filter>
-    </ClInclude>
     <ClInclude Include="intersection.h">
       <Filter>Source File</Filter>
     </ClInclude>
@@ -126,6 +129,12 @@
     </ClInclude>
     <ClInclude Include="ground.h">
       <Filter>Source File\game</Filter>
+    </ClInclude>
+    <ClInclude Include="model.h">
+      <Filter>Source File\util</Filter>
+    </ClInclude>
+    <ClInclude Include="polygon.h">
+      <Filter>Source File\util</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

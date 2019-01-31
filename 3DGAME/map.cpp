@@ -1,5 +1,4 @@
 #include "map.h"
-#include "util.h"
 
 MAP::MAP(INT width, INT height, DWORD* mapData)
 {
@@ -29,7 +28,7 @@ MAP::~MAP()
 {
 	free(nodes);
 	for (int i = 0; i < MAP_MAX_POLYGON; i++) {
-		SAFE_DELETE(polygons[i]);
+		SAFE_DELETE(ground[i]);
 	}
 }
 
@@ -151,8 +150,8 @@ void MAP::FindNeighbours(NODE * pCurrentNode, NODE * pNeighbourNodes[])
 HRESULT MAP::Draw()
 {
 	for (int i = 0; i < MAP_MAX_POLYGON; i++) {
-		if (polygons[i]) {
-			polygons[i]->Draw(NULL);
+		if (ground[i]) {
+			ground[i]->polygon->Draw(NULL);
 		}
 	}
 	return E_NOTIMPL;

@@ -8,15 +8,20 @@
 #define __MAP_H__
 
 #include "main.h"
+#include "model.h"
 #include "heap.h"
 #include "node.h"
 
+#define	MAP_MAX_POLYGON			1024	// ポリゴン方
+
 typedef struct MAP {
+	NODE* nodes;
+	POLYGON* polygons[MAP_MAX_POLYGON] = {};
+
 	int width;
 	int height;
-	NODE* nodes;
 
-	MAP(INT width, INT height);
+	MAP(INT width, INT height, DWORD* mapData);
 	~MAP();
 
 	void				FindPath(NODE* start, NODE* goal, NODE* path[]);

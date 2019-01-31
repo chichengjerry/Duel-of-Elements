@@ -65,9 +65,9 @@ HRESULT DINPUT::Init(HINSTANCE hInst, HWND hWnd)
 	}
 
 	// キーボードへのアクセス権を獲得(入力制御開始)
-	pDIDevKeyboard->Acquire();
+	hr = pDIDevKeyboard->Acquire();
 
-	return S_OK;
+	return hr;
 }
 
 void DINPUT::Destroy(void)
@@ -79,7 +79,9 @@ void DINPUT::Destroy(void)
 HRESULT DINPUT::Update(void)
 {
 	HRESULT hr;
-	BYTE keyStates[NUM_KEY_MAX];
+	BYTE keyStatesOld[NUM_KEY_MAX];
+
+	memcpy(keyStatesOld, keyStates, NUM_KEY_MAX);
 
 	// デバイスからデータを取得
 	hr = pDIDevKeyboard->GetDeviceState(sizeof(keyStates), keyStates);
@@ -88,8 +90,8 @@ HRESULT DINPUT::Update(void)
 	{
 		for (int nCntKey = 0; nCntKey < NUM_KEY_MAX; nCntKey++)
 		{
-			keyStatesTrigger[nCntKey] = (keyStates[nCntKey] ^ keyStates[nCntKey]) & keyStates[nCntKey];
-			keyStatesRelease[nCntKey] = (keyStates[nCntKey] ^ keyStates[nCntKey]) & ~keyStates[nCntKey];
+			keyStatesTrigger[nCntKey] = (keyStatesOld[nCntKey] ^ keyStates[nCntKey]) & keyStates[nCntKey];
+			keyStatesRelease[nCntKey] = (keyStatesOld[nCntKey] ^ keyStates[nCntKey]) & ~keyStates[nCntKey];
 			keyStatesRepeat[nCntKey] = keyStatesTrigger[nCntKey];
 
 			if (keyStates[nCntKey])

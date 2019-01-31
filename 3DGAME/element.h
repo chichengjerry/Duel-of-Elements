@@ -29,11 +29,16 @@ enum ELEMENTTYPE {
 //
 // ¥¨¥ì¥á¥ó¥ÈÇéˆó
 //
-typedef struct _element {
-	ELEMENTS		elements;
+typedef struct ELEMENT {
 
-	MODEL			mdl;
-	SRT				srt;
+	BOOL					isActive;
+	ELEMENTTYPE				elementType;
+	MODEL*					mdl;
+	SRT						srt;
+
+	ELEMENT(SRT* srt);
+	~ELEMENT();
+	void					Fresh(void);
 } ELEMENT;
 
 ELEMENT* create_element(void* map);

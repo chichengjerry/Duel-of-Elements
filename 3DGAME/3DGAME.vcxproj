@@ -124,6 +124,7 @@
     <ClCompile Include="heap.cpp" />
     <ClCompile Include="input.cpp" />
     <ClCompile Include="intersection.cpp" />
+    <ClCompile Include="light.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="map.cpp" />
     <ClCompile Include="model.cpp" />
@@ -139,9 +140,11 @@
     <ClInclude Include="d3d.h" />
     <ClInclude Include="element.h" />
     <ClInclude Include="game.h" />
+    <ClInclude Include="ground.h" />
     <ClInclude Include="heap.h" />
     <ClInclude Include="input.h" />
     <ClInclude Include="intersection.h" />
+    <ClInclude Include="light.h" />
     <ClInclude Include="main.h" />
     <ClInclude Include="map.h" />
     <ClInclude Include="model.h" />

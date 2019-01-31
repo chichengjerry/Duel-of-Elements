@@ -8,11 +8,13 @@
 
 typedef struct NODE {
 	NODE*						pFrom;
-	DWORD						f_score;
-	DWORD						g_score;
+	DWORD						fScore;
+	DWORD						gScore;
 	INT							weight;
 	INT							x;
 	INT							y;
+
+	NODE(INT x, INT y, INT weight);
 
 	static INT					ManhattanDistance(NODE* a, NODE* b);
 	static FLOAT				EuclideanDistance(NODE* a, NODE* b);

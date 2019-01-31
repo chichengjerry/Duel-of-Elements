@@ -19,6 +19,8 @@
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
+void GetWindowSize(DWORD* width, DWORD* height);
+
 DWORD g_nCountFPS;
 
 int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
@@ -34,7 +36,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 	WNDCLASSEX wcex =
 	{
 		sizeof(WNDCLASSEX),
-		CS_CLASSDC,
+		CS_HREDRAW | CS_VREDRAW,
 		WndProc,
 		0,
 		0,
@@ -52,14 +54,18 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 	// ウィンドウクラスの登録
 	RegisterClassEx(&wcex);
 
+	DWORD width, height;
+	DWORD flags = WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX | WS_VISIBLE;
+	GetWindowSize(&width, &height);
+
 	// ウィンドウの作成
 	hWnd = CreateWindow(APP_CLASSNAME,
 		APP_TITLE,
-		WS_OVERLAPPEDWINDOW,
-		CW_USEDEFAULT,
-		CW_USEDEFAULT,
-		CL_WIDTH + GetSystemMetrics(SM_CXDLGFRAME) * 2,
-		CL_HEIGHT + GetSystemMetrics(SM_CXDLGFRAME) * 2 + GetSystemMetrics(SM_CYCAPTION),
+		flags,
+		(GetSystemMetrics(SM_CXSCREEN) - width) / 2,
+		(GetSystemMetrics(SM_CYSCREEN) - height) / 2,
+		width,
+		height,
 		NULL,
 		NULL,
 		hInstance,
@@ -81,7 +87,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 	UpdateWindow(hWnd);
 
 	// メッセージループ
-	while (1)
+	while (TRUE)
 	{
 		if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
 		{
@@ -156,4 +162,14 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	}
 
 	return DefWindowProc(hWnd, uMsg, wParam, lParam);
+}
+
+void GetWindowSize(DWORD* width, DWORD* height) {
+	RECT rect = { 0, 0, CL_WIDTH, CL_HEIGHT };
+	DWORD flags = WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX;
+
+	AdjustWindowRect(&rect, flags, FALSE);
+
+	*width = rect.right - rect.left;
+	*height = rect.bottom - rect.top;
 }

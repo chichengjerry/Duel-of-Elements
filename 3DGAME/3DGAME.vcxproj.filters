@@ -65,6 +65,9 @@
     <ClCompile Include="input.cpp">
       <Filter>Source File\util</Filter>
     </ClCompile>
+    <ClCompile Include="light.cpp">
+      <Filter>Source File</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="element.h">
@@ -117,6 +120,12 @@
     </ClInclude>
     <ClInclude Include="input.h">
       <Filter>Source File\util</Filter>
+    </ClInclude>
+    <ClInclude Include="light.h">
+      <Filter>Source File\game</Filter>
+    </ClInclude>
+    <ClInclude Include="ground.h">
+      <Filter>Source File\game</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -1,5 +1,15 @@
 #include "node.h"
 
+NODE::NODE(INT x, INT y, INT weight)
+{
+	this->pFrom = NULL;
+	this->fScore = 0;
+	this->gScore = 0;
+	this->x = x;
+	this->y = y;
+	this->weight = weight;
+}
+
 INT NODE::ManhattanDistance(NODE * a, NODE * b)
 {
 	return (abs(a->x - b->x) + abs(a->y - b->y)) * NODE_LENGTH;
@@ -14,7 +24,7 @@ FLOAT NODE::EuclideanDistance(NODE * a, NODE * b)
 
 BOOL NODE::Compare(const NODE * a, const NODE * b)
 {
-	return a->f_score < b->f_score;
+	return a->fScore < b->fScore;
 }
 
 void NODE::ReconstructPath(NODE * path[], NODE * current)

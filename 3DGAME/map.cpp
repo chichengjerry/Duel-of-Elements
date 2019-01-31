@@ -1,23 +1,36 @@
 #include "map.h"
 #include "util.h"
 
-MAP::MAP(INT width, INT height)
+MAP::MAP(INT width, INT height, DWORD* mapData)
 {
 	NODE* nodes = (NODE*)malloc(sizeof(NODE) * width * height);
 	if (!nodes) {
 		return;
 	}
-
-	memset(nodes, 0, sizeof(NODE) * width * height);
-
+	this->nodes = nodes;
 	this->width = width;
 	this->height = height;
-	this->nodes = nodes;
+	
+	for (int y = 0; y < this->height; y++) {
+
+		for (int x = 0; x < this->width; x++) {
+			DWORD weight = mapData[y * this->width + x];
+			if (!(weight & 0xF0000000L)) {
+				weight = (weight & 0x0000000FL) * NODE_LENGTH;
+			}
+			NODE node = NODE(x, y, weight);
+
+			SetNode(x, y, &node);
+		}
+	}
 }
 
 MAP::~MAP()
 {
 	free(nodes);
+	for (int i = 0; i < MAP_MAX_POLYGON; i++) {
+		SAFE_DELETE(polygons[i]);
+	}
 }
 
 void MAP::FindPath(NODE * start, NODE * goal, NODE * path[])
@@ -40,8 +53,8 @@ void MAP::FindPath(NODE * start, NODE * goal, NODE * path[])
 
 	// Use manhattan distance
 	current->pFrom = NULL;
-	current->g_score = 0;
-	current->f_score = NODE::ManhattanDistance(start, goal);
+	current->gScore = 0;
+	current->fScore = NODE::ManhattanDistance(start, goal);
 
 	while (heapOpenSet.length) {
 		// Get the node with lowest cost(weight)
@@ -68,17 +81,17 @@ void MAP::FindPath(NODE * start, NODE * goal, NODE * path[])
 					if (0 <= heapClosedSet.Find(node))
 						continue;
 
-					unsigned g_score = current->g_score + (abs(x) == abs(y) ? NODE_LENGTH_DIAGONAL : NODE_LENGTH) + node->weight;
+					unsigned gScore = current->gScore + (abs(x) == abs(y) ? NODE_LENGTH_DIAGONAL : NODE_LENGTH) + node->weight;
 
 					if (0 > heapOpenSet.Find(node)) {
 						heapOpenSet.Push(node);
 					}
-					else if (g_score > node->g_score)
+					else if (gScore > node->gScore)
 						continue;
 
 					node->pFrom = current;
-					node->g_score = g_score;
-					node->f_score = g_score + NODE::ManhattanDistance(node, goal);
+					node->gScore = gScore;
+					node->fScore = gScore + NODE::ManhattanDistance(node, goal);
 				}
 			}
 		}
@@ -92,7 +105,7 @@ BOOL MAP::IsOutOfBound(INT x, INT y)
 
 NODE * MAP::GetNode(INT x, INT y)
 {
-	if (!IsOutOfBound(x, y))
+	if (IsOutOfBound(x, y))
 		return NULL;
 
 	return nodes + y * width + x;
@@ -137,6 +150,11 @@ void MAP::FindNeighbours(NODE * pCurrentNode, NODE * pNeighbourNodes[])
 
 HRESULT MAP::Draw()
 {
+	for (int i = 0; i < MAP_MAX_POLYGON; i++) {
+		if (polygons[i]) {
+			polygons[i]->Draw(NULL);
+		}
+	}
 	return E_NOTIMPL;
 }
 
@@ -152,7 +170,7 @@ void MAP::SetNode(INT x, INT y, NODE * newNode)
 	NODE* oldNode = GetNode(x, y);
 
 	if (newNode)
-		memcpy((void*)oldNode, newNode, sizeof(NODE));
+		memcpy(oldNode, newNode, sizeof(NODE));
 	else
-		memset((void*)oldNode, 0, sizeof(NODE));
+		memset(oldNode, 0, sizeof(NODE));
 }

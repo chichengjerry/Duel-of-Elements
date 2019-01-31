@@ -2,7 +2,7 @@
 #include "camera.h"
 #include "d3d.h"
 
-POLYGON::POLYGON(LPCWSTR src, SRT srt, BOOL isBillboard = FALSE)
+POLYGON::POLYGON(LPCWSTR src, D3DXVECTOR3 vertices[])
 {
 	LPDIRECT3DDEVICE9 pDevice = D3D::GetDevice();
 
@@ -21,22 +21,65 @@ POLYGON::POLYGON(LPCWSTR src, SRT srt, BOOL isBillboard = FALSE)
 		&pTex))) {
 		return;
 	}
-
-	this->srt = srt;
-	this->isBillboard = isBillboard;
-	D3DXMatrixIdentity(&this->mtx);
+	this->srt = SRT();
+	this->col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
+	this->isBillboard = FALSE;
+	memcpy(this->vtx, vertices, sizeof(D3DXVECTOR3) * 4);
+	SetVertex(pDevice);
 }
 
 POLYGON::~POLYGON()
 {
-	SAFE_DELETE(pVtx);
-	SAFE_DELETE(pTex);
+	SAFE_RELEASE(pVtx);
+	SAFE_RELEASE(pTex);
+}
+
+HRESULT POLYGON::SetVertex(LPDIRECT3DDEVICE9 pDevice)
+{
+
+	// オブジェクトの頂点バッファを生成
+	if (FAILED(pDevice->CreateVertexBuffer(sizeof(VERTEX_3D) * NUM_VERTEX,	// 頂点データ用に確保するバッファサイズ(バイト単位)
+		D3DUSAGE_WRITEONLY,			// 頂点バッファの使用法　
+		FVF_VERTEX_2D,				// 使用する頂点フォーマット
+		D3DPOOL_MANAGED,			// リソースのバッファを保持するメモリクラスを指定
+		&pVtx,		// 頂点バッファインターフェースへのポインタ
+		NULL)))						// NULLに設定
+	{
+		return E_FAIL;
+	}
+
+	//頂点バッファの中身を埋める
+	VERTEX_3D* pVertices;
+
+	// 頂点データの範囲をロックし、頂点バッファへのポインタを取得
+	pVtx->Lock(0, 0, (void**)&pVertices, 0);
+
+	// 頂点座標の設定
+	pVertices[0].vtx = vtx[0];
+	pVertices[1].vtx = vtx[1];
+	pVertices[2].vtx = vtx[2];
+	pVertices[3].vtx = vtx[3];
+
+	// 反射光の設定
+	pVertices[0].dif =
+	pVertices[1].dif =
+	pVertices[2].dif =
+	pVertices[3].dif = col;
+
+	// テクスチャ座標の設定
+	pVertices[0].tex = D3DXVECTOR2(0.0f, 0.0f);
+	pVertices[1].tex = D3DXVECTOR2(1.0f, 0.0f);
+	pVertices[2].tex = D3DXVECTOR2(0.0f, 1.0f);
+	pVertices[3].tex = D3DXVECTOR2(1.0f, 1.0f);
+
+	// 頂点データをアンロックする
+	pVtx->Unlock();
 }
 
 HRESULT POLYGON::Draw(CAMERA * pCamera)
 {
-	LPDIRECT3DDEVICE9	pDevice = NULL;
-	D3DXMATRIX			mtxView, mtxScale, mtxTranslate;
+	LPDIRECT3DDEVICE9	pDevice = D3D::GetDevice();
+	D3DXMATRIX			mtxView, mtxScale, mtxRot, mtxTranslate;
 
 	pDevice->SetRenderState(D3DRS_ZWRITEENABLE, FALSE);
 	pDevice->SetRenderState(D3DRS_ZFUNC, D3DCMP_ALWAYS);				// Z比較なし
@@ -45,10 +88,10 @@ HRESULT POLYGON::Draw(CAMERA * pCamera)
 	// ワールドマトリックスの初期化
 	D3DXMatrixIdentity(&mtx);
 
-	if (isBillboard) {
+	if (pCamera && isBillboard) {
 		// ビューマトリックスを取得
 
-		mtxView = *pCamera->GetView();
+		mtxView = *(pCamera->GetView());
 
 		// 転置
 		D3DXMatrixTranspose(&mtx, &mtxView);
@@ -56,6 +99,10 @@ HRESULT POLYGON::Draw(CAMERA * pCamera)
 			mtx._42 =
 			mtx._43 = 0.0f;
 	}
+
+	// 回転を反映
+	D3DXMatrixRotationYawPitchRoll(&mtxRot, srt.rot.y, srt.rot.x, srt.rot.z);
+	D3DXMatrixMultiply(&mtx, &mtx, &mtxRot);
 
 	// スケールを反映
 	D3DXMatrixScaling(&mtxScale, srt.scl.x, srt.scl.y, srt.scl.z);
@@ -101,7 +148,25 @@ void POLYGON::Update()
 {
 }
 
-MODEL::MODEL(LPCWSTR src, SRT srt)
+MODEL::MODEL(LPCWSTR modelSrc, LPCWSTR texSrc)
+{
+	this->nMatNum = 0;
+	this->pMatBuf = NULL;
+	this->pMesh = NULL;
+	this->pTex = NULL;
+	this->srt = SRT();
+	this->col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
+	LoadModel(modelSrc, texSrc);
+}
+
+MODEL::~MODEL()
+{
+	SAFE_RELEASE(pMatBuf);
+	SAFE_RELEASE(pMesh);
+	SAFE_RELEASE(pTex);
+}
+
+HRESULT MODEL::LoadModel(LPCWSTR src, LPCWSTR texSrc)
 {
 	LPDIRECT3DDEVICE9 pDevice = D3D::GetDevice();
 
@@ -114,21 +179,21 @@ MODEL::MODEL(LPCWSTR src, SRT srt)
 		&nMatNum,
 		&pMesh)))
 	{
-		return ;
+		return E_FAIL;
 	}
+	if (texSrc && FAILED(D3DXCreateTextureFromFile(pDevice,		// デバイスへのポインタ
+		texSrc,											// ファイルの名前
+		&pTex)))										// 読み込むメモリー
+	{
+		return E_FAIL;
+	}
+	
+	return S_OK;
 }
 
-MODEL::~MODEL()
+HRESULT MODEL::Draw()
 {
-	SAFE_RELEASE(pMatBuf);
-	SAFE_RELEASE(pMesh);
-	SAFE_RELEASE(pTex);
-}
-
-HRESULT MODEL::Draw(CAMERA * pCamera)
-{
-
-	LPDIRECT3DDEVICE9 pDevice = NULL;
+	LPDIRECT3DDEVICE9 pDevice = D3D::GetDevice();
 	D3DXMATRIX rot, pos;
 	D3DXMATERIAL *pD3DXMat;
 	D3DMATERIAL9 mat;
@@ -155,7 +220,9 @@ HRESULT MODEL::Draw(CAMERA * pCamera)
 
 	for (DWORD nMatCount = 0; nMatCount < nMatNum; nMatCount++, pD3DXMat++)
 	{
+
 		// マテリアルの設定
+		pD3DXMat->MatD3D.Diffuse = col;
 		pDevice->SetMaterial(&pD3DXMat->MatD3D);
 
 		// テクスチャの設定
@@ -183,4 +250,18 @@ SRT * MODEL::GetSrt()
 
 void MODEL::Update()
 {
+}
+
+SRT::SRT()
+{
+	scl = D3DXVECTOR3(1.0f, 1.0f, 1.0f);
+	rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+}
+
+SRT::SRT(D3DXVECTOR3 pos)
+{
+	scl = D3DXVECTOR3(1.0f, 1.0f, 1.0f);
+	rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	pos = pos;
 }

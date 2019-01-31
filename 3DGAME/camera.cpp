@@ -1,8 +1,4 @@
-//=============================================================================
-//
-// カメラ処理 [camera.cpp]
-//
-//=============================================================================
+
 #include "camera.h"
 #include "player.h"
 
@@ -12,28 +8,23 @@
 #define	VALUE_MOVE_CAMERA	(2.0f)					// カメラの移動量
 #define	VALUE_ROTATE_CAMERA	(D3DX_PI * 0.01f)		// カメラの回転量
 
-#define	INTERVAL_CAMERA_R	(12.5f)					// モデルの視線の先までの距離
-#define	RATE_CHASE_CAMERA_P	(0.35f)					// カメラの視点への補正係数
-#define	RATE_CHASE_CAMERA_R	(0.20f)					// カメラの注視点への補正係数
-
-#define	CHASE_HEIGHT_P		(100.0f)				// 追跡時の視点の高さ
-#define	CHASE_HEIGHT_R		(10.0f)					// 追跡時の注視点の高さ
 
 //*****************************************************************************
 // プロトタイプ宣言
 //*****************************************************************************
 
 
-CAMERA::CAMERA(D3DXVECTOR3 pos, PLAYER* player)
+CAMERA::CAMERA(PLAYER* player)
 {
-	p_player = player;
-	v_pos = pos;
-	v_tar = player->srt.pos;
-
 	DWORD height = CL_HEIGHT;
 	DWORD width = CL_WIDTH / 2;
 	DWORD x = player->id * CL_WIDTH / 2;
-	viewport = { x, 0, width, height, 0.0f, 1.0f };
+	this->player = player;
+	this->pitch = -45.0f;
+	this->distance = 100.0f;
+	this->viewport = { x, 0, width, height, 0.0f, 1.0f };
+
+	Update();
 }
 
 CAMERA::~CAMERA()
@@ -79,10 +70,17 @@ void CAMERA::SetCamera(void)
 
 void CAMERA::Update(void)
 {
-	v_tar = p_player->srt.pos;
-}
+	v_tar = player->srt.pos;
 
-CAMERAS::CAMERAS(MAINGAME * pGame)
-{
-	p_game = pGame;
+	v_pos = v_tar - D3DXVECTOR3(distance, 0.0f, 0.0f);
+
+	D3DXVECTOR4 tmp;
+	D3DXMATRIX mtxRot;
+
+	D3DXMatrixIdentity(&mtxRot);
+	// 回転を反映
+	D3DXMatrixRotationYawPitchRoll(&mtxRot, player->srt.rot.y, D3DXToRadian(pitch), player->srt.rot.z);
+	D3DXVec3Transform(&tmp, &v_pos, &mtxRot);
+
+	v_pos = D3DXVECTOR3(tmp.x, tmp.y, tmp.z);
 }

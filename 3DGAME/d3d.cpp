@@ -6,8 +6,12 @@
 LPDIRECT3D9			D3D::pD3D = NULL;								// Direct3D オブジェクト
 LPDIRECT3DDEVICE9	D3D::pDevice = NULL;							// Deviceオブジェクト(描画に必要)
 
+MAINGAME* game;
+
 void D3D::Destroy(void)
 {
+	delete game;
+
 	DSOUND::Destroy();
 
 	DINPUT::Destroy();
@@ -119,18 +123,35 @@ HRESULT D3D::Init(HINSTANCE hInst, HWND hWnd)
 	DINPUT::Init(hInst, hWnd);
 	DSOUND::Init(hWnd);
 
+	game = new MAINGAME(2);
+
 	DSOUND::Play(SOUND_BGM000);
 	return S_OK;
 }
 
 HRESULT D3D::Render(void)
 {
+	pDevice->Clear(0, NULL, (D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER), D3DCOLOR_RGBA(0, 0, 0, 0), 1.0f, 0);
+
+	// Direct3Dによる描画の開始
+	if (SUCCEEDED(pDevice->BeginScene()))
+	{
+		game->Draw();
+
+		// Direct3Dによる描画の終了
+		pDevice->EndScene();
+	}
+
+	// バックバッファとフロントバッファの入れ替え
+	pDevice->Present(NULL, NULL, NULL, NULL);
 	return S_OK;
 }
 
 HRESULT D3D::Update(void)
 {
 	DINPUT::Update();
+
+	game->Update();
 
 	return S_OK;
 }

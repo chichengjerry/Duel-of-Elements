@@ -13,14 +13,15 @@
 
 typedef BYTE ELEMENTS;
 
-enum ELEMENT_TYPE {
-	ELEMENT_EARTH,
-	ELEMENT_WATER,
-	ELEMENT_FIRE,
-	ELEMENT_AIR
+enum ELEMENTTYPE {
+	ELEMENTTYPE_NONE,
+	ELEMENTTYPE_EARTH,
+	ELEMENTTYPE_WATER,
+	ELEMENTTYPE_FIRE,
+	ELEMENTTYPE_AIR
 };
 
-#define MAX_ELEMENTS			16
+#define MAX_ELEMENTS			64
 
 #define GET_ELEMENTS(e, t)		(((e) & (0x3 << (t) * 2)) >> ((t) * 2))
 #define SET_ELEMENTS(e, t, n)	((e) = (e) & (0xff - (0x3 << ((t) * 2))) | ((n) << ((t) * 2)))

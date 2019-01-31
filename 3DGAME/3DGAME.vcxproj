@@ -116,32 +116,38 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="bezier.cpp" />
+    <ClCompile Include="camera.cpp" />
     <ClCompile Include="core.cpp" />
     <ClCompile Include="d3d.cpp" />
     <ClCompile Include="element.cpp" />
     <ClCompile Include="game.cpp" />
     <ClCompile Include="heap.cpp" />
+    <ClCompile Include="input.cpp" />
     <ClCompile Include="intersection.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="map.cpp" />
     <ClCompile Include="model.cpp" />
     <ClCompile Include="node.cpp" />
     <ClCompile Include="player.cpp" />
+    <ClCompile Include="sound.cpp" />
     <ClCompile Include="stage.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="bezier.h" />
+    <ClInclude Include="camera.h" />
     <ClInclude Include="core.h" />
     <ClInclude Include="d3d.h" />
     <ClInclude Include="element.h" />
     <ClInclude Include="game.h" />
     <ClInclude Include="heap.h" />
+    <ClInclude Include="input.h" />
     <ClInclude Include="intersection.h" />
     <ClInclude Include="main.h" />
     <ClInclude Include="map.h" />
     <ClInclude Include="model.h" />
     <ClInclude Include="node.h" />
     <ClInclude Include="player.h" />
+    <ClInclude Include="sound.h" />
     <ClInclude Include="stage.h" />
     <ClInclude Include="util.h" />
   </ItemGroup>

@@ -1,48 +1,39 @@
 #include "model.h"
+#include "camera.h"
+#include "d3d.h"
 
-void srt_init(SRT* srt)
+POLYGON::POLYGON(LPCWSTR src, SRT srt, BOOL isBillboard = FALSE)
 {
-	srt->pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	srt->rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	srt->scl = D3DXVECTOR3(1.0f, 1.0f, 1.0f);
-}
-
-#define VTABLE BILLBOARDVTBL
-static VTABLE billboard_vtable;
-#undef VTABLE
-
-HRESULT billboard_init(BILLBOARD * pBoard, LPCWSTR src)
-{
-	LPDIRECT3DDEVICE9 pDevice = NULL;
+	LPDIRECT3DDEVICE9 pDevice = D3D::GetDevice();
 
 	if (FAILED(pDevice->CreateVertexBuffer(
 		sizeof(VERTEX_3D) * NUM_VERTEX,
 		D3DUSAGE_WRITEONLY,
 		FVF_VERTEX_3D,
 		D3DPOOL_MANAGED,
-		&pBoard->pVtx,
-		NULL)))	{
-		return E_FAIL;
+		&pVtx,
+		NULL))) {
+		return;
 	}
 	if (FAILED(D3DXCreateTextureFromFile(
 		pDevice,
-		src,			
-		&pBoard->pTex))){
-		return E_FAIL;
+		src,
+		&pTex))) {
+		return;
 	}
 
-	pBoard->lpVtbl = &billboard_vtable;
-
-	return S_OK;
+	this->srt = srt;
+	this->isBillboard = isBillboard;
+	D3DXMatrixIdentity(&this->mtx);
 }
 
-void billboard_uninit(BILLBOARD * pBoard)
+POLYGON::~POLYGON()
 {
-	SAFE_RELEASE(pBoard->pTex);
-	SAFE_RELEASE(pBoard->pVtx);
+	SAFE_DELETE(pVtx);
+	SAFE_DELETE(pTex);
 }
 
-HRESULT billboard_draw(BILLBOARD * pBoard)
+HRESULT POLYGON::Draw(CAMERA * pCamera)
 {
 	LPDIRECT3DDEVICE9	pDevice = NULL;
 	D3DXMATRIX			mtxView, mtxScale, mtxTranslate;
@@ -52,36 +43,39 @@ HRESULT billboard_draw(BILLBOARD * pBoard)
 	pDevice->SetRenderState(D3DRS_LIGHTING, FALSE);
 
 	// ワールドマトリックスの初期化
-	D3DXMatrixIdentity(&pBoard->mtx);
+	D3DXMatrixIdentity(&mtx);
 
-	// ビューマトリックスを取得
-	// mtxView = GetMtxView();
+	if (isBillboard) {
+		// ビューマトリックスを取得
 
-	// 転置
-	D3DXMatrixTranspose(&pBoard->mtx, &mtxView);
-	pBoard->mtx._41 =
-	pBoard->mtx._42 =
-	pBoard->mtx._43 = 0.0f;
+		mtxView = *pCamera->GetView();
+
+		// 転置
+		D3DXMatrixTranspose(&mtx, &mtxView);
+		mtx._41 =
+			mtx._42 =
+			mtx._43 = 0.0f;
+	}
 
 	// スケールを反映
-	D3DXMatrixScaling(&mtxScale, pBoard->srt.scl.x, pBoard->srt.scl.y, pBoard->srt.scl.z);
-	D3DXMatrixMultiply(&pBoard->mtx, &pBoard->mtx, &mtxScale);
+	D3DXMatrixScaling(&mtxScale, srt.scl.x, srt.scl.y, srt.scl.z);
+	D3DXMatrixMultiply(&mtx, &mtx, &mtxScale);
 
 	// 移動を反映
-	D3DXMatrixTranslation(&mtxTranslate, pBoard->srt.pos.x, pBoard->srt.pos.y, pBoard->srt.pos.z);
-	D3DXMatrixMultiply(&pBoard->mtx, &pBoard->mtx, &mtxTranslate);
+	D3DXMatrixTranslation(&mtxTranslate, srt.pos.x, srt.pos.y, srt.pos.z);
+	D3DXMatrixMultiply(&mtx, &mtx, &mtxTranslate);
 
 	// ワールドマトリックスの設定
-	pDevice->SetTransform(D3DTS_WORLD, &pBoard->mtx);
+	pDevice->SetTransform(D3DTS_WORLD, &mtx);
 
 	// 頂点バッファをデバイスのデータストリームにバインド
-	pDevice->SetStreamSource(0, pBoard->pVtx, 0, sizeof(VERTEX_3D));
+	pDevice->SetStreamSource(0, pVtx, 0, sizeof(VERTEX_3D));
 
 	// 頂点フォーマットの設定
 	pDevice->SetFVF(FVF_VERTEX_3D);
 
 	// テクスチャの設定
-	pDevice->SetTexture(0, pBoard->pTex);
+	pDevice->SetTexture(0, pTex);
 
 	// ポリゴンの描画
 	pDevice->DrawPrimitive(D3DPT_TRIANGLESTRIP, NUM_VERTEX, NUM_POLYGON);
@@ -93,52 +87,47 @@ HRESULT billboard_draw(BILLBOARD * pBoard)
 	return S_OK;
 }
 
-D3DXMATRIX * billboard_get_matrix(BILLBOARD * pBoard)
+D3DXMATRIX * POLYGON::GetMatrix()
 {
-	return &pBoard->mtx;
+	return &mtx;
 }
 
-SRT * billboard_get_srt(BILLBOARD * pBoard)
+SRT * POLYGON::GetSrt()
 {
-	return &pBoard->srt;
+	return &srt;
 }
 
-
-#define VTABLE MODELVTBL
-static VTABLE model_vtable;
-#undef VTABLE
-
-HRESULT model_init(MODEL * pModel, LPCWSTR src)
+void POLYGON::Update()
 {
-	LPDIRECT3DDEVICE9 pDevice = NULL;
+}
+
+MODEL::MODEL(LPCWSTR src, SRT srt)
+{
+	LPDIRECT3DDEVICE9 pDevice = D3D::GetDevice();
 
 	if (FAILED(D3DXLoadMeshFromX(src,
 		D3DXMESH_SYSTEMMEM,
 		pDevice,
 		NULL,
-		&pModel->pMatBuf,
+		&pMatBuf,
 		NULL,
-		&pModel->nMatNum,
-		&pModel->pMesh)))
+		&nMatNum,
+		&pMesh)))
 	{
-		return E_FAIL;
+		return ;
 	}
-
-	srt_init(&pModel->srt);
-	pModel->lpVtbl = &model_vtable;
-
-	return S_OK;
 }
 
-void model_uninit(MODEL * pModel)
+MODEL::~MODEL()
 {
-	SAFE_RELEASE(pModel->pMatBuf);
-	SAFE_RELEASE(pModel->pMesh);
-	SAFE_RELEASE(pModel->pTex);
+	SAFE_RELEASE(pMatBuf);
+	SAFE_RELEASE(pMesh);
+	SAFE_RELEASE(pTex);
 }
 
-HRESULT model_draw(MODEL * pModel)
+HRESULT MODEL::Draw(CAMERA * pCamera)
 {
+
 	LPDIRECT3DDEVICE9 pDevice = NULL;
 	D3DXMATRIX rot, pos;
 	D3DXMATERIAL *pD3DXMat;
@@ -148,32 +137,32 @@ HRESULT model_draw(MODEL * pModel)
 	pDevice->GetMaterial(&mat);
 
 	// マテリアル情報に対するポインタを取得
-	pD3DXMat = (D3DXMATERIAL*)pModel->pMatBuf->GetBufferPointer();
+	pD3DXMat = (D3DXMATERIAL*)pMatBuf->GetBufferPointer();
 
 	// ワールドマトリックスの初期化
-	D3DXMatrixIdentity(&pModel->mtx);
+	D3DXMatrixIdentity(&mtx);
 
 	// 回転を反映
-	D3DXMatrixRotationYawPitchRoll(&rot, pModel->srt.rot.y, pModel->srt.rot.x, pModel->srt.rot.z);
-	D3DXMatrixMultiply(&pModel->mtx, &pModel->mtx, &rot);
+	D3DXMatrixRotationYawPitchRoll(&rot, srt.rot.y, srt.rot.x, srt.rot.z);
+	D3DXMatrixMultiply(&mtx, &mtx, &rot);
 
 	// 移動を反映
-	D3DXMatrixTranslation(&pos, pModel->srt.pos.x, pModel->srt.pos.y, pModel->srt.pos.z);
-	D3DXMatrixMultiply(&pModel->mtx, &pModel->mtx, &pos);
+	D3DXMatrixTranslation(&pos, srt.pos.x, srt.pos.y, srt.pos.z);
+	D3DXMatrixMultiply(&mtx, &mtx, &pos);
 
 	// ワールドマトリックスの設定
-	pDevice->SetTransform(D3DTS_WORLD, &pModel->mtx);
+	pDevice->SetTransform(D3DTS_WORLD, &mtx);
 
-	for (DWORD nMatCount = 0; nMatCount < pModel->nMatNum; nMatCount++, pD3DXMat++)
+	for (DWORD nMatCount = 0; nMatCount < nMatNum; nMatCount++, pD3DXMat++)
 	{
 		// マテリアルの設定
 		pDevice->SetMaterial(&pD3DXMat->MatD3D);
 
 		// テクスチャの設定
-		pDevice->SetTexture(0, pModel->pTex);
+		pDevice->SetTexture(0, pTex);
 
 		// 描画
-		pModel->pMesh->DrawSubset(nMatCount);
+		pMesh->DrawSubset(nMatCount);
 	}
 
 	// マテリアル情報回復
@@ -182,12 +171,16 @@ HRESULT model_draw(MODEL * pModel)
 	return S_OK;
 }
 
-D3DXMATRIX * model_get_matrix(MODEL * pModel)
+D3DXMATRIX * MODEL::GetMatrix()
 {
-	return &pModel->mtx;
+	return &mtx;
 }
 
-SRT * model_get_srt(MODEL * pModel)
+SRT * MODEL::GetSrt()
 {
-	return &pModel->srt;
+	return &srt;
+}
+
+void MODEL::Update()
+{
 }

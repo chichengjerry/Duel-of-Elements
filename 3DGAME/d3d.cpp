@@ -1,25 +1,29 @@
 #include "d3d.h"
+#include "stage.h"
+#include "sound.h"
+#include "input.h"
 
-static D3DVTBL vtable;
+LPDIRECT3D9			D3D::pD3D = NULL;								// Direct3D オブジェクト
+LPDIRECT3DDEVICE9	D3D::pDevice = NULL;							// Deviceオブジェクト(描画に必要)
 
-void D3DDestroy(LPD3D _this)
+void D3D::Destroy(void)
 {
-	if (_this) {
-		SAFE_RELEASE(_this->pD3D);
-		SAFE_RELEASE(_this->pDevice);
-	}
+	DSOUND::Destroy();
+
+	DINPUT::Destroy();
+	SAFE_RELEASE(D3D::pD3D);
+	SAFE_RELEASE(D3D::pDevice);
 }
 
-LPDIRECT3DDEVICE9 D3DGetDevice(LPD3D _this)
+LPDIRECT3DDEVICE9 D3D::GetDevice(void)
 {
-	return _this->pDevice;
-};
+	return D3D::pDevice;
+}
 
-HRESULT D3DInit(LPD3D _this, HINSTANCE hInst, HWND hWnd)
+HRESULT D3D::Init(HINSTANCE hInst, HWND hWnd)
 {
-	_this->lpVtbl = &vtable;
-	LPDIRECT3D9 pD3D = _this->pD3D;
-	LPDIRECT3DDEVICE9 pDevice = _this->pDevice;
+	LPDIRECT3D9 pD3D;
+	LPDIRECT3DDEVICE9 pDevice;
 
 	D3DPRESENT_PARAMETERS d3dpp;
 	D3DDISPLAYMODE d3ddm;
@@ -32,6 +36,7 @@ HRESULT D3DInit(LPD3D _this, HINSTANCE hInst, HWND hWnd)
 	{
 		return E_FAIL;
 	}
+	D3D::pD3D = pD3D;
 
 	// 現在のディスプレイモードを取得
 	if (FAILED(pD3D->GetAdapterDisplayMode(D3DADAPTER_DEFAULT, &d3ddm)))
@@ -91,7 +96,7 @@ HRESULT D3DInit(LPD3D _this, HINSTANCE hInst, HWND hWnd)
 			}
 		}
 	}
-
+	D3D::pDevice = pDevice;
 	// レンダリングステートパラメータの設定
 	pDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_CCW);				// 裏面をカリング
 	pDevice->SetRenderState(D3DRS_ZENABLE, TRUE);						// Zバッファを使用
@@ -111,16 +116,21 @@ HRESULT D3DInit(LPD3D _this, HINSTANCE hInst, HWND hWnd)
 	pDevice->SetTextureStageState(0, D3DTSS_ALPHAARG2, D3DTA_CURRENT);		// ２番目のアルファ引数
 
 	// 初期化
+	DINPUT::Init(hInst, hWnd);
+	DSOUND::Init(hWnd);
 
-
+	DSOUND::Play(SOUND_BGM000);
 	return S_OK;
 }
 
-HRESULT D3DRender(LPD3D _this)
+HRESULT D3D::Render(void)
 {
-	return E_NOTIMPL;
+	return S_OK;
 }
 
-void D3DUpdate(LPD3D _this)
+HRESULT D3D::Update(void)
 {
+	DINPUT::Update();
+
+	return S_OK;
 }

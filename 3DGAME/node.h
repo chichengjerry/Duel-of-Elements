@@ -6,23 +6,19 @@
 #define NODE_LENGTH				10
 #define NODE_LENGTH_DIAGONAL	14
 
-typedef struct _node {
-	NODE* came_from;
-	unsigned f_score;
-	unsigned g_score;
-	int weight;
-	int x;
-	int y;
+typedef struct NODE {
+	NODE*						pFrom;
+	DWORD						f_score;
+	DWORD						g_score;
+	INT							weight;
+	INT							x;
+	INT							y;
+
+	static INT					ManhattanDistance(NODE* a, NODE* b);
+	static FLOAT				EuclideanDistance(NODE* a, NODE* b);
+	static BOOL					Compare(const NODE* a, const NODE* b);
+	static void					ReconstructPath(NODE* path[], NODE* current);
+	static void					Swap(NODE** a, NODE** b);
 } NODE;
-
-int node_manhattan_distance(NODE* a, NODE* b);
-
-float node_euclidean_distance(NODE* a, NODE* b);
-
-bool node_compare(const NODE* a, const NODE* b);
-
-void node_reconstruct_path(NODE* path[], NODE* current);
-
-void node_swap(NODE** a, NODE** b);
 
 #endif // !_NODE_H_

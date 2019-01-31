@@ -13,30 +13,22 @@ enum STAGETYPE {
 	STAGE_END
 };
 
-#define VTBL STAGEVTABLE
 
-struct VTBL;
+struct STATEINTRO;
+struct STATEEND;
 
-typedef struct {
+typedef struct GAMESTATE {
 	STAGETYPE			stage;
-	GAME*				pStateGame;
-	INTRO*				pStateIntro;
-	END*				pStateEnd;
-	
-	VTBL*				lpVtbl;
+	MAINGAME*			pStateGame;
+	MAINGAME*			pStateIntro;
+	MAINGAME*			pStateEnd;
+
+	GAMESTATE(STAGETYPE eStageType);
+	virtual	~GAMESTATE(void);
+
+	STAGETYPE			getStage(void);
+	void				setStage(STAGETYPE eStageType);
 } GAMESTATE;
 
-void					stage_init(GAMESTATE* pStage, STAGETYPE eStageType);
-void					stage_uninit(GAMESTATE* pStage);
-
-STAGETYPE				stage_get(GAMESTATE* pStage);
-void					stage_set(GAMESTATE* pStage, STAGETYPE eStageType);
-
-typedef struct VTBL{
-	void				(*init)(GAMESTATE* _this, STAGETYPE eStageType) = stage_init;
-	void				(*uninit)(GAMESTATE* _this) = stage_uninit;
-};
-
-#undef VTBL
 
 #endif // !__STAGE_H__

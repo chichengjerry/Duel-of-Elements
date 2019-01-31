@@ -37,8 +37,8 @@
 #define GR_VSYNC				FALSE
 #define GR_SHOWFPS				FALSE
 
-//
-// 関数オーバーライド
-//
+struct CAMERA;
+struct CAMERAS;
+struct MAINGAME;
 
 #endif // !__CORE_H__

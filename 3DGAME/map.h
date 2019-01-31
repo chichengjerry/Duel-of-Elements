@@ -11,23 +11,21 @@
 #include "heap.h"
 #include "node.h"
 
-typedef struct _map {
+typedef struct MAP {
 	int width;
 	int height;
 	NODE* nodes;
 
+	MAP(INT width, INT height);
+	~MAP();
 
+	void				FindPath(NODE* start, NODE* goal, NODE* path[]);
+	BOOL				IsOutOfBound(INT x, INT y);
+	NODE*				GetNode(INT x, INT y);
+	void				FindNeighbours(NODE* pCurrentNode, NODE* pNeighbourNodes[]);
+	HRESULT				Draw();
+	void				Update();
+	void				SetNode(INT x, INT y, NODE* newNode);
 } MAP;
-
-MAP*					map_init(MAP* pMap, int width, int height);
-void					map_uninit(MAP* pMap);
-
-void					map_aasterisk(const MAP* map, NODE* start, NODE* goal, NODE* path[]);
-BOOL					map_out_of_bound(const MAP* map, int x, int y);
-NODE*					map_get_node(const MAP* map, int x, int y);
-void					map_find_neighbours(const MAP* map, NODE* pCurrentNode, NODE* pNeighbourNodes[]);
-
-HRESULT					map_draw(const MAP* pMap);
-void					map_update(const MAP* pMap, int x, int y, const NODE* new_node);
 
 #endif // !__MAP_H__

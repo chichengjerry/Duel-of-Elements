@@ -27,7 +27,7 @@
 #include "dinput.h"
 #include "mmsystem.h"
 
-#include <dsound.h>
+#include "xaudio2.h"
 
 /***********************************************
  * マクロ定義

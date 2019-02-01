@@ -74,6 +74,9 @@
     <ClCompile Include="polygon.cpp">
       <Filter>Source File\util</Filter>
     </ClCompile>
+    <ClCompile Include="sky.cpp">
+      <Filter>Source File\game</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="element.h">
@@ -135,6 +138,9 @@
     </ClInclude>
     <ClInclude Include="polygon.h">
       <Filter>Source File\util</Filter>
+    </ClInclude>
+    <ClInclude Include="sky.h">
+      <Filter>Source File\game</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

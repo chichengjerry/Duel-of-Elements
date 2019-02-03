@@ -122,19 +122,19 @@
     <ClCompile Include="element.cpp" />
     <ClCompile Include="game.cpp" />
     <ClCompile Include="ground.cpp" />
-    <ClCompile Include="heap.cpp" />
+    <ClCompile Include="image.cpp" />
     <ClCompile Include="input.cpp" />
     <ClCompile Include="intersection.cpp" />
     <ClCompile Include="light.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="map.cpp" />
     <ClCompile Include="model.cpp" />
-    <ClCompile Include="node.cpp" />
     <ClCompile Include="player.cpp" />
     <ClCompile Include="polygon.cpp" />
     <ClCompile Include="sky.cpp" />
     <ClCompile Include="sound.cpp" />
     <ClCompile Include="stage.cpp" />
+    <ClCompile Include="terrian.cpp" />
+    <ClCompile Include="util.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="bezier.h" />
@@ -143,20 +143,20 @@
     <ClInclude Include="d3d.h" />
     <ClInclude Include="element.h" />
     <ClInclude Include="game.h" />
+    <ClInclude Include="gamemain.h" />
     <ClInclude Include="ground.h" />
-    <ClInclude Include="heap.h" />
+    <ClInclude Include="image.h" />
     <ClInclude Include="input.h" />
     <ClInclude Include="intersection.h" />
     <ClInclude Include="light.h" />
     <ClInclude Include="main.h" />
-    <ClInclude Include="map.h" />
     <ClInclude Include="model.h" />
-    <ClInclude Include="node.h" />
     <ClInclude Include="player.h" />
     <ClInclude Include="polygon.h" />
     <ClInclude Include="sky.h" />
     <ClInclude Include="sound.h" />
     <ClInclude Include="stage.h" />
+    <ClInclude Include="terrian.h" />
     <ClInclude Include="util.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

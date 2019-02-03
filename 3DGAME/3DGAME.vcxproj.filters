@@ -26,17 +26,8 @@
     <ClCompile Include="element.cpp">
       <Filter>Source File\game</Filter>
     </ClCompile>
-    <ClCompile Include="heap.cpp">
-      <Filter>Source File\util</Filter>
-    </ClCompile>
-    <ClCompile Include="node.cpp">
-      <Filter>Source File\util</Filter>
-    </ClCompile>
     <ClCompile Include="bezier.cpp">
       <Filter>Source File\util</Filter>
-    </ClCompile>
-    <ClCompile Include="map.cpp">
-      <Filter>Source File\game</Filter>
     </ClCompile>
     <ClCompile Include="core.cpp">
       <Filter>Source File\util</Filter>
@@ -62,20 +53,29 @@
     <ClCompile Include="input.cpp">
       <Filter>Source File\util</Filter>
     </ClCompile>
-    <ClCompile Include="light.cpp">
-      <Filter>Source File</Filter>
-    </ClCompile>
     <ClCompile Include="model.cpp">
       <Filter>Source File\util</Filter>
-    </ClCompile>
-    <ClCompile Include="ground.cpp">
-      <Filter>Source File</Filter>
     </ClCompile>
     <ClCompile Include="polygon.cpp">
       <Filter>Source File\util</Filter>
     </ClCompile>
     <ClCompile Include="sky.cpp">
       <Filter>Source File\game</Filter>
+    </ClCompile>
+    <ClCompile Include="ground.cpp">
+      <Filter>Source File\game</Filter>
+    </ClCompile>
+    <ClCompile Include="terrian.cpp">
+      <Filter>Source File\game</Filter>
+    </ClCompile>
+    <ClCompile Include="util.cpp">
+      <Filter>Source File</Filter>
+    </ClCompile>
+    <ClCompile Include="light.cpp">
+      <Filter>Source File\game</Filter>
+    </ClCompile>
+    <ClCompile Include="image.cpp">
+      <Filter>Source File\util</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -88,17 +88,8 @@
     <ClInclude Include="main.h">
       <Filter>Source File</Filter>
     </ClInclude>
-    <ClInclude Include="heap.h">
-      <Filter>Source File\util</Filter>
-    </ClInclude>
-    <ClInclude Include="node.h">
-      <Filter>Source File\util</Filter>
-    </ClInclude>
     <ClInclude Include="bezier.h">
       <Filter>Source File\util</Filter>
-    </ClInclude>
-    <ClInclude Include="map.h">
-      <Filter>Source File\game</Filter>
     </ClInclude>
     <ClInclude Include="core.h">
       <Filter>Source File\util</Filter>
@@ -140,6 +131,15 @@
       <Filter>Source File\util</Filter>
     </ClInclude>
     <ClInclude Include="sky.h">
+      <Filter>Source File\game</Filter>
+    </ClInclude>
+    <ClInclude Include="image.h">
+      <Filter>Source File\util</Filter>
+    </ClInclude>
+    <ClInclude Include="terrian.h">
+      <Filter>Source File\game</Filter>
+    </ClInclude>
+    <ClInclude Include="gamemain.h">
       <Filter>Source File\game</Filter>
     </ClInclude>
   </ItemGroup>

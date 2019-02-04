@@ -77,6 +77,9 @@
     <ClCompile Include="image.cpp">
       <Filter>Source File\util</Filter>
     </ClCompile>
+    <ClCompile Include="particle.cpp">
+      <Filter>Source File\util</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="element.h">
@@ -141,6 +144,9 @@
     </ClInclude>
     <ClInclude Include="gamemain.h">
       <Filter>Source File\game</Filter>
+    </ClInclude>
+    <ClInclude Include="particle.h">
+      <Filter>Source File\util</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

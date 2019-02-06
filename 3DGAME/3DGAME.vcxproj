@@ -116,7 +116,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="bezier.cpp" />
+    <ClCompile Include="maths.cpp" />
     <ClCompile Include="camera.cpp" />
     <ClCompile Include="core.cpp" />
     <ClCompile Include="d3d.cpp" />
@@ -136,10 +136,10 @@
     <ClCompile Include="sound.cpp" />
     <ClCompile Include="stage.cpp" />
     <ClCompile Include="terrian.cpp" />
-    <ClCompile Include="util.cpp" />
+    <ClCompile Include="easing.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="bezier.h" />
+    <ClInclude Include="maths.h" />
     <ClInclude Include="camera.h" />
     <ClInclude Include="core.h" />
     <ClInclude Include="d3d.h" />
@@ -160,7 +160,11 @@
     <ClInclude Include="sound.h" />
     <ClInclude Include="stage.h" />
     <ClInclude Include="terrian.h" />
+    <ClInclude Include="easing.h" />
     <ClInclude Include="util.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\README.md" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -62,9 +62,6 @@
     <ClCompile Include="ground.cpp">
       <Filter>Source File\game</Filter>
     </ClCompile>
-    <ClCompile Include="terrian.cpp">
-      <Filter>Source File\game</Filter>
-    </ClCompile>
     <ClCompile Include="light.cpp">
       <Filter>Source File\game</Filter>
     </ClCompile>
@@ -79,6 +76,12 @@
     </ClCompile>
     <ClCompile Include="easing.cpp">
       <Filter>Source File\util</Filter>
+    </ClCompile>
+    <ClCompile Include="bullet.cpp">
+      <Filter>Source File\game</Filter>
+    </ClCompile>
+    <ClCompile Include="terrain.cpp">
+      <Filter>Source File\game</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -136,9 +139,6 @@
     <ClInclude Include="image.h">
       <Filter>Source File\util</Filter>
     </ClInclude>
-    <ClInclude Include="terrian.h">
-      <Filter>Source File\game</Filter>
-    </ClInclude>
     <ClInclude Include="gamemain.h">
       <Filter>Source File\game</Filter>
     </ClInclude>
@@ -150,6 +150,12 @@
     </ClInclude>
     <ClInclude Include="easing.h">
       <Filter>Source File\util</Filter>
+    </ClInclude>
+    <ClInclude Include="bullet.h">
+      <Filter>Source File\game</Filter>
+    </ClInclude>
+    <ClInclude Include="terrain.h">
+      <Filter>Source File\game</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

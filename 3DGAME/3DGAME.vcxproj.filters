@@ -15,6 +15,9 @@
     <Filter Include="Source File\util">
       <UniqueIdentifier>{b1c8793d-c106-4440-9a89-d8c40494400e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source File\ui">
+      <UniqueIdentifier>{f188adbd-a13c-45ce-a64f-38d74b89cfbc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -84,7 +87,10 @@
       <Filter>Source File\util</Filter>
     </ClCompile>
     <ClCompile Include="meshfield.cpp">
-      <Filter>Source File</Filter>
+      <Filter>Source File\util</Filter>
+    </ClCompile>
+    <ClCompile Include="ui_game.cpp">
+      <Filter>Source File\ui</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -162,6 +168,9 @@
     </ClInclude>
     <ClInclude Include="meshfield.h">
       <Filter>Source File\util</Filter>
+    </ClInclude>
+    <ClInclude Include="ui_game.h">
+      <Filter>Source File\ui</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

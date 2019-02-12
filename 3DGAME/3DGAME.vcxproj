@@ -139,6 +139,7 @@
     <ClCompile Include="stage.cpp" />
     <ClCompile Include="terrain.cpp" />
     <ClCompile Include="easing.cpp" />
+    <ClCompile Include="ui_game.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="bullet.h" />
@@ -165,6 +166,7 @@
     <ClInclude Include="stage.h" />
     <ClInclude Include="terrain.h" />
     <ClInclude Include="easing.h" />
+    <ClInclude Include="ui_game.h" />
     <ClInclude Include="util.h" />
   </ItemGroup>
   <ItemGroup>

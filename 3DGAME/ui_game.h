@@ -5,7 +5,7 @@
 #include "core.h"
 #include "image.h"
 #include "gamemain.h"
-#include "game.h"
+#include "ui_digits.h"
 
 #define UI_MAX_DIGITS			6
 
@@ -15,6 +15,7 @@ typedef struct MAINGAMEUI {
 
 	MAINGAME*					pGame;
 	DIGITIMAGE*					score[GM_MAX_PLAYER][UI_MAX_DIGITS];
+	IMAGE*						elements[GM_MAX_PLAYER][2];
 
 	MAINGAMEUI(MAINGAME* game);
 	~MAINGAMEUI();

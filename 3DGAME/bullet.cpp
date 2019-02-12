@@ -4,7 +4,7 @@
 #include "player.h"
 #include "terrain.h"
 
-#define GM_BULLET_SPEED			5.0f
+#define GM_BULLET_SPEED			10.0f
 #define BULLET_SPRITE			_T("data/TEXTURE/glow01.jpg")
 
 BULLET::BULLET(PLAYER * player, D3DXVECTOR3* tar)

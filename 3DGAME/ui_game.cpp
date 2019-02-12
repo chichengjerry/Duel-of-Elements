@@ -2,7 +2,7 @@
 #include "game.h"
 #include "player.h"
 
-#define IMAGE_ELEMENT		_T("")
+#define IMAGE_ELEMENT		_T("data/TEXTURE/ui/elements.png")
 #define IMAGE_STATUS		_T("")
 
 LPDIRECT3DTEXTURE9	MAINGAMEUI::pTexElement = NULL;
@@ -14,28 +14,45 @@ MAINGAMEUI::MAINGAMEUI(MAINGAME* game)
 
 	const FLOAT DIGIT_GAP = 24.0f;
 	const FLOAT DIGIT_SIZE = 32.0f;
-	// score
-	for (int j = 0; j < UI_MAX_DIGITS; j++) {
-		D3DXVECTOR3 vtx[4];
 
-		vtx[0] = D3DXVECTOR3(j * DIGIT_GAP, DIGIT_GAP, 0.0f);
-		vtx[1] = D3DXVECTOR3(j * DIGIT_GAP + DIGIT_SIZE, DIGIT_GAP, 0.0f);
-		vtx[2] = D3DXVECTOR3(j * DIGIT_GAP, DIGIT_GAP + DIGIT_SIZE, 0.0f);
-		vtx[3] = D3DXVECTOR3(j * DIGIT_GAP + DIGIT_SIZE, DIGIT_GAP + DIGIT_SIZE, 0.0f);
+	if (pGame->players[0]) {
+		for (int j = 0; j < UI_MAX_DIGITS; j++) {
+			D3DXVECTOR3 vtx[4];
 
-		score[0][j] = new DIGITIMAGE(0, vtx);
+			// score
+			vtx[0] = D3DXVECTOR3(j * DIGIT_GAP, DIGIT_GAP, 0.0f);
+			vtx[1] = D3DXVECTOR3(j * DIGIT_GAP + DIGIT_SIZE, DIGIT_GAP, 0.0f);
+			vtx[2] = D3DXVECTOR3(j * DIGIT_GAP, DIGIT_GAP + DIGIT_SIZE, 0.0f);
+			vtx[3] = D3DXVECTOR3(j * DIGIT_GAP + DIGIT_SIZE, DIGIT_GAP + DIGIT_SIZE, 0.0f);
+
+			score[0][j] = new DIGITIMAGE(0, vtx);
+			score[0][j]->image->SetDiffuseColor(&D3DXCOLOR(1.0f, 0.25f, 0.25f, 1.0f));
+
+		}
 	}
 
-	for (int j = 0; j < UI_MAX_DIGITS; j++) {
-		D3DXVECTOR3 vtx[4];
-		D3DXVECTOR3 offset = D3DXVECTOR3(CL_WIDTH - DIGIT_SIZE * 6 + (DIGIT_SIZE - DIGIT_GAP) * 5.0f, 0.0f, 0.0f);
-		vtx[0] = offset + D3DXVECTOR3(j * DIGIT_GAP, DIGIT_GAP, 0.0f);
-		vtx[1] = offset + D3DXVECTOR3(j * DIGIT_GAP + DIGIT_SIZE, DIGIT_GAP, 0.0f);
-		vtx[2] = offset + D3DXVECTOR3(j * DIGIT_GAP, DIGIT_GAP + DIGIT_SIZE, 0.0f);
-		vtx[3] = offset + D3DXVECTOR3(j * DIGIT_GAP + DIGIT_SIZE, DIGIT_GAP + DIGIT_SIZE, 0.0f);
+	if (pGame->players[1]) {
+		for (int j = 0; j < UI_MAX_DIGITS; j++) {
+			D3DXVECTOR3 vtx[4];
 
-		score[1][j] = new DIGITIMAGE(0, vtx);
+			// score
+			D3DXVECTOR3 offset = D3DXVECTOR3(CL_WIDTH - DIGIT_SIZE * 6 + (DIGIT_SIZE - DIGIT_GAP) * 5.0f, 0.0f, 0.0f);
+			vtx[0] = offset + D3DXVECTOR3(j * DIGIT_GAP, DIGIT_GAP, 0.0f);
+			vtx[1] = offset + D3DXVECTOR3(j * DIGIT_GAP + DIGIT_SIZE, DIGIT_GAP, 0.0f);
+			vtx[2] = offset + D3DXVECTOR3(j * DIGIT_GAP, DIGIT_GAP + DIGIT_SIZE, 0.0f);
+			vtx[3] = offset + D3DXVECTOR3(j * DIGIT_GAP + DIGIT_SIZE, DIGIT_GAP + DIGIT_SIZE, 0.0f);
+			score[1][j] = new DIGITIMAGE(0, vtx);
+			score[1][j]->image->SetDiffuseColor(&D3DXCOLOR(0.25f, 1.0f, 0.25f, 1.0f));
+
+			//elements
+			// vtx[0] = D3DXVECTOR3()
+			// vtx[1] = D3DXVECTOR3()
+			// vtx[2] = D3DXVECTOR3()
+			// vtx[3] = D3DXVECTOR3()
+			// elements[1][0] = new IMAGE(pTexElement, )
+		}
 	}
+	
 }
 
 MAINGAMEUI::~MAINGAMEUI()

@@ -24,12 +24,12 @@ D3DXCOLOR COLORMAP::GetColor(FLOAT t)
 	for (int i = 0; i < steps - 1; i++) {
 		if (t >= mCols[i].t && t <= mCols[i + 1].t) {
 
+			// Liner Interpolate
 			FLOAT dif = mCols[i + 1].t - mCols[i].t;
 
-			if (dif == 0.0f) {
+			if (dif <= 0.0f) {
 				return mCols[i + 1].color;
 			}
-
 			t = (t - mCols[i].t) / dif;
 
 			return mCols[i].color * (1 - t) + mCols[i + 1].color * t;
@@ -89,7 +89,8 @@ HRESULT MESHFIELD::Draw()
 
 	// ƒ|ƒŠƒSƒ“‚Ì•`‰æ
 	pDevice->DrawIndexedPrimitive(D3DPT_TRIANGLESTRIP, 0, 0, dwVtxCount, 0, dwPolyCount);
-	return E_NOTIMPL;
+
+	return S_OK;
 }
 
 void MESHFIELD::Update()
@@ -145,12 +146,18 @@ HRESULT MESHFIELD::SetVertex(BYTE* pHeightMap, COLORMAP* colorMap)
 		for (int x = 0; x < (nMapSizeX + 1); x++){
 			FLOAT height = fMinHeight + (fMaxHeight - fMinHeight) * (pHeightMap[z * (nMapSizeX + 1) + x] / 255.0f);
 			D3DXCOLOR col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
-			
-			pVtx[z * (nMapSizeX + 1) + x].vtx = D3DXVECTOR3((x - nMapSizeX / 2.0f) * nBlkSizeX, height, (z - nMapSizeZ/ 2.0f) * nBlkSizeZ);
-			pVtx[z * (nMapSizeX + 1) + x].dif = GetDiffuse(pHeightMap[z * (nMapSizeX + 1) + x], colorMap);
-			pVtx[z * (nMapSizeX + 1) + x].tex = D3DXVECTOR2(texSizeX * x, texSizeZ * z);
 
+			// Set Vertex
+			pVtx[z * (nMapSizeX + 1) + x].vtx = D3DXVECTOR3((x - nMapSizeX / 2.0f) * nBlkSizeX, height, (z - nMapSizeZ/ 2.0f) * nBlkSizeZ);
+
+			// Set Normal
 			// pVtx[z * (nMapSizeX + 1) + x].nor = D3DXVECTOR3(0.0f, 1.0f, 0.0f);
+
+			// Set Color
+			pVtx[z * (nMapSizeX + 1) + x].dif = GetDiffuse(pHeightMap[z * (nMapSizeX + 1) + x], colorMap);
+			
+			// Set Texture
+			pVtx[z * (nMapSizeX + 1) + x].tex = D3DXVECTOR2(texSizeX * x, texSizeZ * z);
 		}
 	}
 
@@ -203,7 +210,10 @@ HRESULT MESHFIELD::SetVertex(BYTE* pHeightMap, COLORMAP* colorMap)
 D3DXCOLOR MESHFIELD::GetDiffuse(BYTE height, COLORMAP* colorMap)
 {
 	FLOAT t = height / 255.0f;
-	return colorMap->GetColor(t);
+	if (colorMap)
+		return colorMap->GetColor(t);
+	else
+		return D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
 }
 
 FLOAT MESHFIELD::GetPositionHeight(FLOAT fx, FLOAT fz)

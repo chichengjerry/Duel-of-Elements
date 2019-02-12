@@ -116,10 +116,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="barrier.cpp" />
     <ClCompile Include="bullet.cpp" />
     <ClCompile Include="maths.cpp" />
     <ClCompile Include="camera.cpp" />
-    <ClCompile Include="core.cpp" />
     <ClCompile Include="d3d.cpp" />
     <ClCompile Include="element.cpp" />
     <ClCompile Include="game.cpp" />
@@ -139,9 +139,11 @@
     <ClCompile Include="stage.cpp" />
     <ClCompile Include="terrain.cpp" />
     <ClCompile Include="easing.cpp" />
+    <ClCompile Include="ui_digits.cpp" />
     <ClCompile Include="ui_game.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="barrier.h" />
     <ClInclude Include="bullet.h" />
     <ClInclude Include="maths.h" />
     <ClInclude Include="camera.h" />
@@ -166,6 +168,7 @@
     <ClInclude Include="stage.h" />
     <ClInclude Include="terrain.h" />
     <ClInclude Include="easing.h" />
+    <ClInclude Include="ui_digits.h" />
     <ClInclude Include="ui_game.h" />
     <ClInclude Include="util.h" />
   </ItemGroup>

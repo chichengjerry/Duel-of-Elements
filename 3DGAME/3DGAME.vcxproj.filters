@@ -29,9 +29,6 @@
     <ClCompile Include="element.cpp">
       <Filter>Source File\game</Filter>
     </ClCompile>
-    <ClCompile Include="core.cpp">
-      <Filter>Source File\util</Filter>
-    </ClCompile>
     <ClCompile Include="d3d.cpp">
       <Filter>Source File\util</Filter>
     </ClCompile>
@@ -91,6 +88,12 @@
     </ClCompile>
     <ClCompile Include="ui_game.cpp">
       <Filter>Source File\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="ui_digits.cpp">
+      <Filter>Source File\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="barrier.cpp">
+      <Filter>Source File\game</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -171,6 +174,12 @@
     </ClInclude>
     <ClInclude Include="ui_game.h">
       <Filter>Source File\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="ui_digits.h">
+      <Filter>Source File\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="barrier.h">
+      <Filter>Source File\game</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

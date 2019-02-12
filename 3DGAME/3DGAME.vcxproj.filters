@@ -59,9 +59,6 @@
     <ClCompile Include="sky.cpp">
       <Filter>Source File\game</Filter>
     </ClCompile>
-    <ClCompile Include="ground.cpp">
-      <Filter>Source File\game</Filter>
-    </ClCompile>
     <ClCompile Include="light.cpp">
       <Filter>Source File\game</Filter>
     </ClCompile>
@@ -82,6 +79,12 @@
     </ClCompile>
     <ClCompile Include="terrain.cpp">
       <Filter>Source File\game</Filter>
+    </ClCompile>
+    <ClCompile Include="perlin.cpp">
+      <Filter>Source File\util</Filter>
+    </ClCompile>
+    <ClCompile Include="meshfield.cpp">
+      <Filter>Source File</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -124,9 +127,6 @@
     <ClInclude Include="light.h">
       <Filter>Source File\game</Filter>
     </ClInclude>
-    <ClInclude Include="ground.h">
-      <Filter>Source File\game</Filter>
-    </ClInclude>
     <ClInclude Include="model.h">
       <Filter>Source File\util</Filter>
     </ClInclude>
@@ -156,6 +156,12 @@
     </ClInclude>
     <ClInclude Include="terrain.h">
       <Filter>Source File\game</Filter>
+    </ClInclude>
+    <ClInclude Include="perlin.h">
+      <Filter>Source File\util</Filter>
+    </ClInclude>
+    <ClInclude Include="meshfield.h">
+      <Filter>Source File\util</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

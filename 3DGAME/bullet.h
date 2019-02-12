@@ -7,17 +7,22 @@
 #include "particle.h"
 
 struct BULLET {
-	ELEMENTTYPE		bulletType;
-	D3DXCOLOR		col;
-	EMITTER*		bullet;
-	PLAYER*			src;
 	BOOL			bAlive;
+	FLOAT			fSpeed;
+	ELEMENTTYPE		bulletType;
+	D3DXVECTOR3		pos;
+	D3DXCOLOR		col;
+	EMITTER*		bulletParticleEmitter;
+	PLAYER*			src;
+	BOOL			hit;
 
-	BULLET(PLAYER* player, D3DXVECTOR3 tar);
+	BULLET(PLAYER* player, D3DXVECTOR3* tar);
 	~BULLET();
 
-	void			Update();
-	HRESULT			Draw(TERRAIN* terrian);
+	static void		Add(BULLET* pBullets[], INT length, PLAYER* player, D3DXVECTOR3* tar);
+	
+	void			Update(TERRAIN* terrain);
+	HRESULT			Draw(CAMERA* camera);
 };
 
 #endif // !__BULLET_H__

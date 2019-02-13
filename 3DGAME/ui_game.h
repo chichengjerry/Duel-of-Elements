@@ -24,7 +24,6 @@ typedef struct MAINGAMEUI {
 	HRESULT						Draw();
 
 	HRESULT						LoadTexture();
-	void						SetScore();
 
 
 } MAINGAMEUI;

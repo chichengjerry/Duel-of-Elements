@@ -4,13 +4,14 @@
 #include "player.h"
 #include "terrain.h"
 
+#define GM_BULLET_SIZE			10.0f
 #define GM_BULLET_SPEED			10.0f
 #define BULLET_SPRITE			_T("data/TEXTURE/glow01.jpg")
 
 BULLET::BULLET(PLAYER * player, D3DXVECTOR3* tar)
 {
 	src = player;
-	bulletType = src->elementType;
+	bulletType = src->defenseType;
 	col = ElementColor[bulletType];
 	bAlive = TRUE;
 	fSpeed = GM_BULLET_SPEED;
@@ -29,7 +30,7 @@ BULLET::BULLET(PLAYER * player, D3DXVECTOR3* tar)
 	D3DXVec3Normalize(&mov, &mov);
 	pos = player->srt.pos;
 
-	bulletParticleEmitter = new EMITTER(BULLET_SPRITE, 32, pos + mov * 32.0f, mov * GM_BULLET_SPEED, col, 5.0f);
+	bulletParticleEmitter = new EMITTER(BULLET_SPRITE, 32, pos + mov * 32.0f, mov * GM_BULLET_SPEED, col, GM_BULLET_SIZE);
 	for (int i = 1; i < 32; i++) {
 		bulletParticleEmitter->particles[i].pos = bulletParticleEmitter->particles[i - 1].pos - mov;
 		bulletParticleEmitter->particles[i].scl = (32 - i) / 32.0f;

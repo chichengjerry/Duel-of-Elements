@@ -1,4 +1,5 @@
 #include "barrier.h"
+#include "player.h"
 
 #define BARRIER_TEXTURE		_T("data/TEXTURE/forcefield.png")
 
@@ -30,17 +31,8 @@ HRESULT BARRIER::Draw(CAMERA * camera)
 {
 	LPDIRECT3DDEVICE9 pDevice = D3D::GetDevice();
 
-	//pDevice->SetRenderState(D3DRS_FOGENABLE, TRUE);
-	//pDevice->SetRenderState(D3DRS_FOGCOLOR, D3DXCOLOR(1.0f, 0.0f, 0.0f, 0.0f));
-
-	//FLOAT Start = 0.0f;		// Linear fog distances
-	//FLOAT End = 256.0f;
-	//pDevice->SetRenderState(D3DRS_FOGTABLEMODE, D3DFOG_LINEAR);
-	//pDevice->SetRenderState(D3DRS_FOGSTART, *(DWORD *)(&Start));
-	//pDevice->SetRenderState(D3DRS_FOGEND, *(DWORD *)(&End));
-
 	//// ラインティングを無効にする
-	//pDevice->SetRenderState(D3DRS_LIGHTING, FALSE);
+	pDevice->SetRenderState(D3DRS_LIGHTING, FALSE);
 	pDevice->SetRenderState(D3DRS_BLENDOP, D3DBLENDOP_ADD);	// 結果 = 転送元(SRC) + 転送先(DEST)
 	pDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
 	pDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_ONE);
@@ -74,8 +66,6 @@ HRESULT BARRIER::Draw(CAMERA * camera)
 	// 通常ブレンドに戻す
 	pDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);		// αソースカラーの指定
 	pDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);	// αデスティネーションカラーの指定
-
-	pDevice->SetRenderState(D3DRS_FOGENABLE, FALSE);
 
 	return S_OK;
 }
@@ -113,8 +103,8 @@ HRESULT BARRIER::SetVertex(TERRAIN * terrain)
 		{ 1, 3, 5, 7 }
 	};
 
-	FLOAT width = terrain->nMapSize * terrain->nBlockSize / 4.0f;
-	FLOAT height = GM_MAX_HEIGHT;
+	FLOAT width = terrain->nMapSize * terrain->nBlockSize / 4.0f + PLAYER_SIZE;
+	FLOAT height = GM_MAX_HEIGHT + PLAYER_SIZE;
 	FLOAT textScale = width / 16.0f;
 
 	VERTEX_3D* pTempVtx;
@@ -147,4 +137,6 @@ HRESULT BARRIER::SetVertex(TERRAIN * terrain)
 	}
 
 	pVtx->Unlock();
+
+	return S_OK;
 }

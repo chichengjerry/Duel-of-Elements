@@ -136,8 +136,8 @@ HRESULT MESHFIELD::SetVertex(BYTE* pHeightMap, COLORMAP* colorMap)
 	}
 
 	VERTEX_3D *pVtx;
-	FLOAT texSizeX = 1.0f;
-	FLOAT texSizeZ = 1.0f;
+	FLOAT texSizeX = 64.0f / nMapSizeX;
+	FLOAT texSizeZ = 64.0f / nMapSizeZ;
 
 	// ’¸“_ì¬
 	pVtxBuf->Lock(0, 0, (void**)&pVtx, 0);

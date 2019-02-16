@@ -18,36 +18,25 @@ MAINGAMEUI::MAINGAMEUI(MAINGAME* game)
 
 	LPDIRECT3DDEVICE9 pDevice = D3D::GetDevice();
 
-	if (!pTexElement) {
-		if (FAILED(D3DXCreateTextureFromFile(pDevice,			// デバイスへのポインタ
-			IMAGE_ELEMENT,										// ファイルの名前
-			&pTexElement)))										// 読み込むメモリー
-		{
-			return;
-		}
-	}
+	D3D::LoadTexture(&pTexElement, IMAGE_ELEMENT);
 
 	if (pGame->players[0]) {
-		D3DXVECTOR3 vtx[4];
 
 		for (int j = 0; j < UI_MAX_DIGITS; j++) {
-			
-			// score
-			vtx[0] = D3DXVECTOR3(DIGIT_GAP + j * DIGIT_GAP, DIGIT_GAP, 0.0f);
-			vtx[1] = D3DXVECTOR3(DIGIT_GAP + j * DIGIT_GAP + DIGIT_SIZE, DIGIT_GAP, 0.0f);
-			vtx[2] = D3DXVECTOR3(DIGIT_GAP + j * DIGIT_GAP, DIGIT_GAP + DIGIT_SIZE, 0.0f);
-			vtx[3] = D3DXVECTOR3(DIGIT_GAP + j * DIGIT_GAP + DIGIT_SIZE, DIGIT_GAP + DIGIT_SIZE, 0.0f);
 
-			score[0][j] = new DIGITIMAGE(0, vtx);
-			score[0][j]->image->SetDiffuseColor(&D3DXCOLOR(1.0f, 0.25f, 0.25f, 1.0f));
+			D3DRECT rect = {
+				DIGIT_GAP + j * DIGIT_GAP, DIGIT_GAP, DIGIT_SIZE, DIGIT_SIZE
+			};
+
+			score[0][j] = new DIGITIMAGE(0, &rect);
+			score[0][j]->image->SetDiffuseColor(D3DXCOLOR(1.0f, 0.25f, 0.25f, 1.0f));
 		}
 		for (int j = 0; j < 2; j++) {
+			D3DRECT rect = {
+				ELEMENT_SIZE * 2, CL_HEIGHT - ELEMENT_SIZE * (4 - j * 2), ELEMENT_SIZE, ELEMENT_SIZE
+			};
 			// elements
-			vtx[0] = D3DXVECTOR3(ELEMENT_SIZE * 2, CL_HEIGHT - ELEMENT_SIZE * (4 - j * 2), 0.0f);
-			vtx[1] = D3DXVECTOR3(ELEMENT_SIZE * 3, CL_HEIGHT - ELEMENT_SIZE * (4 - j * 2), 0.0f);
-			vtx[2] = D3DXVECTOR3(ELEMENT_SIZE * 2, CL_HEIGHT - ELEMENT_SIZE * (3 - j * 2), 0.0f);
-			vtx[3] = D3DXVECTOR3(ELEMENT_SIZE * 3, CL_HEIGHT - ELEMENT_SIZE * (3 - j * 2), 0.0f);
-			elements[0][j] = new IMAGE(pTexElement, vtx);
+			elements[0][j] = new IMAGE(pTexElement, &rect);
 			elements[0][j]->nFrameTotal = 5;
 			elements[0][j]->SetTexture();
 		}
@@ -58,22 +47,21 @@ MAINGAMEUI::MAINGAMEUI(MAINGAME* game)
 
 		for (int j = 0; j < UI_MAX_DIGITS; j++) {
 			// score
-			D3DXVECTOR3 offset = D3DXVECTOR3(CL_WIDTH - DIGIT_SIZE - DIGIT_GAP * 6, 0.0f, 0.0f);
-			vtx[0] = offset + D3DXVECTOR3(j * DIGIT_GAP, DIGIT_GAP, 0.0f);
-			vtx[1] = offset + D3DXVECTOR3(j * DIGIT_GAP + DIGIT_SIZE, DIGIT_GAP, 0.0f);
-			vtx[2] = offset + D3DXVECTOR3(j * DIGIT_GAP, DIGIT_GAP + DIGIT_SIZE, 0.0f);
-			vtx[3] = offset + D3DXVECTOR3(j * DIGIT_GAP + DIGIT_SIZE, DIGIT_GAP + DIGIT_SIZE, 0.0f);
-			score[1][j] = new DIGITIMAGE(0, vtx);
-			score[1][j]->image->SetDiffuseColor(&D3DXCOLOR(0.25f, 1.0f, 0.25f, 1.0f));
+
+			D3DRECT rect = {
+				CL_WIDTH - DIGIT_SIZE - DIGIT_GAP * 5 + j * DIGIT_GAP, DIGIT_GAP, DIGIT_SIZE, DIGIT_SIZE
+			};
+
+			score[1][j] = new DIGITIMAGE(0, &rect);
+			score[1][j]->image->SetDiffuseColor(D3DXCOLOR(0.25f, 1.0f, 0.25f, 1.0f));
 
 		}
 		for (int j = 0; j < 2; j++) {
 			// elements
-			vtx[0] = D3DXVECTOR3(CL_WIDTH - ELEMENT_SIZE * 3, CL_HEIGHT - ELEMENT_SIZE * (4 - j * 2), 0.0f);
-			vtx[1] = D3DXVECTOR3(CL_WIDTH - ELEMENT_SIZE * 2, CL_HEIGHT - ELEMENT_SIZE * (4 - j * 2), 0.0f);
-			vtx[2] = D3DXVECTOR3(CL_WIDTH - ELEMENT_SIZE * 3, CL_HEIGHT - ELEMENT_SIZE * (3 - j * 2), 0.0f);
-			vtx[3] = D3DXVECTOR3(CL_WIDTH - ELEMENT_SIZE * 2, CL_HEIGHT - ELEMENT_SIZE * (3 - j * 2), 0.0f);
-			elements[1][j] = new IMAGE(pTexElement, vtx);
+			D3DRECT rect = {
+				CL_WIDTH - ELEMENT_SIZE * 3, CL_HEIGHT - ELEMENT_SIZE * (4 - j * 2), ELEMENT_SIZE, ELEMENT_SIZE
+			};
+			elements[1][j] = new IMAGE(pTexElement, &rect);
 			elements[1][j]->nFrameTotal = 5;
 			elements[1][j]->SetTexture();
 		}

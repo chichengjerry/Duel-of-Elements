@@ -12,7 +12,7 @@ typedef struct DIGITIMAGE {
 	INT							digit;
 	D3DXCOLOR					col;
 
-	DIGITIMAGE(INT digit, D3DXVECTOR3 vtx[]);
+	DIGITIMAGE(INT digit, D3DRECT* rect);
 	~DIGITIMAGE();
 
 	HRESULT						Draw();

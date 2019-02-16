@@ -5,11 +5,11 @@
 DWORD				DIGITIMAGE::count = 0;
 LPDIRECT3DTEXTURE9	DIGITIMAGE::pTex = NULL;
 
-DIGITIMAGE::DIGITIMAGE(INT digit, D3DXVECTOR3 vtx[])
+DIGITIMAGE::DIGITIMAGE(INT digit, D3DRECT* rect)
 {
 	count++;
 	LoadTexture();
-	image = new IMAGE(pTex, vtx);
+	image = new IMAGE(pTex, rect);
 	image->nFrameIndex = 0;
 	image->nFrameTotal = 10;
 	image->SetTexture();

@@ -139,8 +139,10 @@
     <ClCompile Include="stage.cpp" />
     <ClCompile Include="terrain.cpp" />
     <ClCompile Include="easing.cpp" />
+    <ClCompile Include="title.cpp" />
     <ClCompile Include="ui_digits.cpp" />
     <ClCompile Include="ui_game.cpp" />
+    <ClCompile Include="ui_title.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="barrier.h" />
@@ -168,8 +170,10 @@
     <ClInclude Include="stage.h" />
     <ClInclude Include="terrain.h" />
     <ClInclude Include="easing.h" />
+    <ClInclude Include="title.h" />
     <ClInclude Include="ui_digits.h" />
     <ClInclude Include="ui_game.h" />
+    <ClInclude Include="ui_title.h" />
     <ClInclude Include="util.h" />
   </ItemGroup>
   <ItemGroup>

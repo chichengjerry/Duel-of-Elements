@@ -22,7 +22,7 @@ static FLOAT fade(FLOAT t) {
 	return t * t * t * (t * (t * 6 - 15) + 10);
 }
 
-static FLOAT grad(int hash, double x, double y, double z)
+static FLOAT grad(int hash, FLOAT x, FLOAT y, FLOAT z)
 {
 	switch (hash & 0xF)
 	{
@@ -74,9 +74,9 @@ FLOAT PERLIN::Perlin(FLOAT x, FLOAT y, FLOAT z)
 {
 	// If we have any repeat on, change the coordinates to their "local" repetitions
 	if (repeat > 0) {
-		x = (int)x % repeat;
-		y = (int)y % repeat;
-		z = (int)z % repeat;
+		x = (FLOAT)((int)x % repeat);
+		y = (FLOAT)((int)y % repeat);
+		z = (FLOAT)((int)z % repeat);
 	}
 	// Calculate the "unit cube" that the point asked will be located in
 	// The left bound is ( |_x_|,|_y_|,|_z_| ) and the right bound is that

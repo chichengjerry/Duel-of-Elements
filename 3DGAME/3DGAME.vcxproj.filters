@@ -35,9 +35,6 @@
     <ClCompile Include="d3d.cpp">
       <Filter>Source File\util</Filter>
     </ClCompile>
-    <ClCompile Include="intersection.cpp">
-      <Filter>Source File</Filter>
-    </ClCompile>
     <ClCompile Include="stage.cpp">
       <Filter>Source File\util</Filter>
     </ClCompile>
@@ -102,7 +99,7 @@
       <Filter>Source File\title</Filter>
     </ClCompile>
     <ClCompile Include="ui_title.cpp">
-      <Filter>Source File</Filter>
+      <Filter>Source File\ui</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -120,12 +117,6 @@
     </ClInclude>
     <ClInclude Include="d3d.h">
       <Filter>Source File\util</Filter>
-    </ClInclude>
-    <ClInclude Include="intersection.h">
-      <Filter>Source File</Filter>
-    </ClInclude>
-    <ClInclude Include="util.h">
-      <Filter>Source File</Filter>
     </ClInclude>
     <ClInclude Include="stage.h">
       <Filter>Source File\util</Filter>
@@ -195,6 +186,9 @@
     </ClInclude>
     <ClInclude Include="ui_title.h">
       <Filter>Source File\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="util.h">
+      <Filter>Source File\util</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

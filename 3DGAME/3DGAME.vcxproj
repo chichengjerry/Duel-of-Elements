@@ -42,7 +42,7 @@
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v141</PlatformToolset>
-    <CharacterSet>MultiByte</CharacterSet>
+    <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -84,6 +84,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -109,6 +110,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -118,6 +120,7 @@
   <ItemGroup>
     <ClCompile Include="barrier.cpp" />
     <ClCompile Include="bullet.cpp" />
+    <ClCompile Include="explosion.cpp" />
     <ClCompile Include="maths.cpp" />
     <ClCompile Include="camera.cpp" />
     <ClCompile Include="d3d.cpp" />
@@ -142,10 +145,12 @@
     <ClCompile Include="ui_digits.cpp" />
     <ClCompile Include="ui_game.cpp" />
     <ClCompile Include="ui_title.cpp" />
+    <ClCompile Include="ui_tutorial.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="barrier.h" />
     <ClInclude Include="bullet.h" />
+    <ClInclude Include="explosion.h" />
     <ClInclude Include="maths.h" />
     <ClInclude Include="camera.h" />
     <ClInclude Include="core.h" />
@@ -172,6 +177,7 @@
     <ClInclude Include="ui_digits.h" />
     <ClInclude Include="ui_game.h" />
     <ClInclude Include="ui_title.h" />
+    <ClInclude Include="ui_tutorial.h" />
     <ClInclude Include="util.h" />
   </ItemGroup>
   <ItemGroup>

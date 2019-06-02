@@ -1,3 +1,9 @@
+//-----------------------------------------------
+// [perlin.cpp]
+// ノイズ生成
+// 作者 Chicheng Zhang
+// 参考資料：https://gist.github.com/Flafla2/f0260a861be0ebdeef76
+//-----------------------------------------------
 #include "perlin.h"
 
 // Hash lookup table as defined by Ken Perlin.  This is a randomly
@@ -95,13 +101,13 @@ FLOAT PERLIN::Perlin(FLOAT x, FLOAT y, FLOAT z)
 	FLOAT w = fade(zf);
 
 	int aaa, aba, aab, abb, baa, bba, bab, bbb;
-	aaa = p[p[p[xi] + yi] + zi];
-	aba = p[p[p[xi] + inc(yi)] + zi];
-	aab = p[p[p[xi] + yi] + inc(zi)];
-	abb = p[p[p[xi] + inc(yi)] + inc(zi)];
-	baa = p[p[p[inc(xi)] + yi] + zi];
-	bba = p[p[p[inc(xi)] + inc(yi)] + zi];
-	bab = p[p[p[inc(xi)] + yi] + inc(zi)];
+	aaa = p[p[p[xi     ] + yi     ] + zi     ];
+	aba = p[p[p[xi     ] + inc(yi)] + zi     ];
+	aab = p[p[p[xi     ] + yi     ] + inc(zi)];
+	abb = p[p[p[xi     ] + inc(yi)] + inc(zi)];
+	baa = p[p[p[inc(xi)] + yi     ] + zi     ];
+	bba = p[p[p[inc(xi)] + inc(yi)] + zi     ];
+	bab = p[p[p[inc(xi)] + yi     ] + inc(zi)];
 	bbb = p[p[p[inc(xi)] + inc(yi)] + inc(zi)];
 
 	FLOAT x1, x2, y1, y2;

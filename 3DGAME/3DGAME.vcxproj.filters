@@ -204,8 +204,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\README.md">
-      <Filter>リソース ファイル</Filter>
-    </None>
+    <None Include="..\README.md" />
   </ItemGroup>
 </Project>
